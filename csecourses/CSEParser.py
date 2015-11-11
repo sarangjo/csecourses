@@ -5,6 +5,8 @@ from html.parser import HTMLParser
 
 __author__ = 'Sarang'
 
+debug = True
+
 
 # MyHTMLParser extends the HTMLParser class
 
@@ -72,36 +74,38 @@ class MyHTMLParser(HTMLParser):
         self.cseClass.code = code[0]
 
     def parse_description(self, desc):
-        # This is where I need to parse out the fucking prereqs muthafuqqaaaaaaa
         self.cseClass.description = desc
+        # 1. Check if the class has prereqs
         try:
             setup = desc[desc.index("Prereq"):]
         except ValueError:
             # No prerequisites
             self.cseClass.pre_reqs = "None"
-            print("None")
+            if debug:
+                print("None")
             return
 
-        # TODO: Handle not ending with a period (not terribly necessary)
-
+        # 2. Extract actual prereq string
         try:
+            # TODO: Handle not ending with a period (not terribly necessary)
             # There is other text after the prerequisite
             end_index = setup.index(". ")
         except ValueError:
             # Prereq is the last thing in the description
             end_index = len(setup) - 1
-
         setup = setup[(setup.index(" ") + 1):end_index]
 
-        # Parse out individual pre_reqs
+        # 3. Parse out individual pre_reqs
         prs = setup.split("; ")
         pre_reqs = []
         for pr in prs:
+            if debug:
+                print(pr)
+            # Convert from string to object
             pre_req = PreRequisite(pr)
             pre_reqs.append(pre_req)
-            pre_req.print()
-
-            # print(pre_reqs)
+            if debug:
+                pre_req.print()
 
 
 class Timing(Enum):
@@ -115,13 +119,27 @@ class PreRequisite(object):
         self.timing = Timing.pre
         self.min_gpa = None
         self.code = ""
-        self.parse(pr)
+        self.pr = pr
+        self.parse()
 
-    def parse(self, pr):
+    def parse(self):
         try:
-            self.code = int(pr[len(pr) - 3:])
+            # REGULAR PREREQS
+            # First, check to see if the prereq ends in a number
+            code = int(self.pr[len(self.pr) - 3:])
+            regular = True
+            # Then, check to see if the text before the numbers are only caps
+            for i in self.pr:
+                if i != " " and i.islower():
+                    regular = False
+                    break
+            if regular:
+                self.code = code
+                return
         except ValueError:
             pass
+
+        # MIN GPA
 
     def print(self):
         print(self.code)
