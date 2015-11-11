@@ -1,11 +1,13 @@
 import csv
 import re
+from enum import Enum
 from html.parser import HTMLParser
 
 __author__ = 'Sarang'
 
 
 # MyHTMLParser extends the HTMLParser class
+
 class MyHTMLParser(HTMLParser):
     def error(self, message):
         pass
@@ -70,7 +72,59 @@ class MyHTMLParser(HTMLParser):
         self.cseClass.code = code[0]
 
     def parse_description(self, desc):
+        # This is where I need to parse out the fucking prereqs muthafuqqaaaaaaa
         self.cseClass.description = desc
+        try:
+            setup = desc[desc.index("Prereq"):]
+        except ValueError:
+            # No prerequisites
+            self.cseClass.pre_reqs = "None"
+            print("None")
+            return
+
+        # TODO: Handle not ending with a period (not terribly necessary)
+
+        try:
+            # There is other text after the prerequisite
+            end_index = setup.index(". ")
+        except ValueError:
+            # Prereq is the last thing in the description
+            end_index = len(setup) - 1
+
+        setup = setup[(setup.index(" ") + 1):end_index]
+
+        # Parse out individual pre_reqs
+        prs = setup.split("; ")
+        pre_reqs = []
+        for pr in prs:
+            pre_req = PreRequisite(pr)
+            pre_reqs.append(pre_req)
+            pre_req.print()
+
+            # print(pre_reqs)
+
+
+class Timing(Enum):
+    pre = 0
+    conc = 1
+
+
+class PreRequisite(object):
+    def __init__(self, pr):
+        self.equiv = False
+        self.timing = Timing.pre
+        self.min_gpa = None
+        self.code = ""
+        self.parse(pr)
+
+    def parse(self, pr):
+        try:
+            self.code = int(pr[len(pr) - 3:])
+        except ValueError:
+            pass
+
+    def print(self):
+        print(self.code)
 
 
 class CSEClass(object):
@@ -79,13 +133,15 @@ class CSEClass(object):
         self.code = 0
         self.name = ""
         self.description = ""
+        self.pre_reqs = []
 
     @property
     def __str__(self):
-        s = ("CODE: " + str(self.code))
-        s += ("\nNAME: " + self.name)
-        s += ("\nDESC: " + self.description)
-        return s
+        string = ("CODE: " + str(self.code))
+        string += ("\nNAME: " + self.name)
+        string += ("\nDESC: " + self.description)
+        string += ("\nPREREQS: " + str(self.pre_reqs))
+        return string
 
 
 f = open('cse.html')

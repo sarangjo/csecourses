@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>D3 Page Template</title>
         <script type="text/javascript" src="d3/d3.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
         <script type="text/javascript">
@@ -14,21 +15,60 @@
                     console.log(data);
                 }
             });*/
-            var dataset = ["Kavya", "Tanvi", "Sahana"];
 
-            d3.select("body").selectAll("p")
+            var dataset = [5, 10, 15, 20, 25, 5, 10, 15, 20, 25, 5, 10, 15, 20, 25, 5, 10, 15, 20, 25, 5, 10, 15, 20, 25];
+
+            var w = 500;
+            var h = 100;
+
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+
+            svg.selectAll("rect")
                 .data(dataset)
                 .enter()
-                .append("p")
-                .text(function(d) {
-                    return d + " fuqin sux.";
+                .append("rect")
+                .attr("x", function(d, i) {
+                    return i * 21;
                 })
-                .style("color", function(d) {
-                    if(d == "Kavya") {
-                        return "red";
-                    }
-                    return "black";
-                });
+                .attr("y", 0)
+                .attr("width", 20)
+                .attr("height", 100);
+
+            if(false) {
+                d3.select("body").selectAll("div")
+                    .data(dataset) // loops through the dataset
+                    .enter()
+                    .append("div")
+                    .attr("class", "bar")
+                    .style("height", function(d) {
+                        return (d) + "px";
+                    });
+            }
+
+            var svg = d3.select("body").append("svg");
+            svg.attr("width", w)
+                .attr("height", h);
+
+            /*var circles = svg.selectAll()
+                .data(dataset)
+                .enter()
+                .append("circle");
+
+            circles.attr("cx", function(d, i) {
+                    return (i * 50) + 25;
+                })
+                .attr("cy", h/2)
+                .attr("r", function(d) {
+                    return d;
+                })
+                .attr("fill", "yellow")
+                .attr("stroke", "orange")
+                .attr("stroke-width", function(d) {
+                    return d/3;
+                });*/
         </script>
     </body>
 </html>

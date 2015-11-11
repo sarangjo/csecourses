@@ -2,8 +2,10 @@ body {
   background-color: #FFFFFF;
 }
 
-#legend {
-  float: left;
+div.bar {
+	display: inline-block;
+	width: 20px;
+	height: 75px;
+	margin-right: 2px;
+	background-color: teal;
 }
-.jumbotron { max-height: 200px;
-padding-top: 10px; }
