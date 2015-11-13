@@ -111,6 +111,16 @@ class MyHTMLParser(HTMLParser):
 class Timing(Enum):
     pre = 0
     conc = 1
+    
+
+class PROperator(object):
+    def __init__(self, opType, *ops):
+        self.operands = ops
+        self.opType = opType
+    
+    def add(self, op):
+        operands.append(op)
+        
 
 
 class PreRequisite(object):
