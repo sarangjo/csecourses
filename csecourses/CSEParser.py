@@ -79,6 +79,8 @@ class PreRequisite(object):
             pass
 
         # MIN GPA
+        # EITHER-OR
+        # CONCURRENTLY
         self.default = pr
         self.code = ClassCode()
 
