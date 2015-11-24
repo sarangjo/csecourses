@@ -58,11 +58,29 @@ class PreRequisite(object):
         self.parse(pr)
 
     def parse(self, pr):
+        code = self.parse_single_code(pr)
+        if code:
+            self.code = code
+
+        # MIN GPA
+        if pr.startswith('minimum grade of'):
+            # minimum grade of 2.5 in X
+            words = pr.split(" ")
+            gpa = float(words[3])
+            words = words[5:]
+            # Parse rest of the code
+            #parsed = parse(words)
+        # EITHER-OR
+        # CONCURRENTLY
+        self.default = pr
+        self.code = ClassCode()
+
+    def parse_single_code(self, pr):
         try:
             # REGULAR PRE REQS
             # First, check to see if the pre-req ends in a number
+            # CSE 143
             code_val = int(pr[len(pr) - 3:])
-            # code = "CSE " + str(code_val)
             regular = True
             # Then, check to see if the text before the numbers are only caps
             for i in pr:
@@ -71,18 +89,10 @@ class PreRequisite(object):
                     break
             if regular:
                 # TODO: generalize to non-CSE
-                # self.pr_class = CSEClass()
-                # self.pr_class.code = code_val
-                self.code = ClassCode("CSE", code_val)
-                return
+                dept_val = pr[:len(pr) - 4]
+                return ClassCode(dept_val, code_val)
         except ValueError:
-            pass
-
-        # MIN GPA
-        # EITHER-OR
-        # CONCURRENTLY
-        self.default = pr
-        self.code = ClassCode()
+            return None
 
     def __str__(self):
         if self.code.num == 0:
@@ -225,7 +235,7 @@ class CSEHTMLParser(HTMLParser):
 cse_classes = {}
 
 # ALGORITHM
-# 1. Go through all classes and just store the description
+# 1. Go through all classes and store the pre-reqs
 f = open('cse.html')
 s = f.read()
 
@@ -254,10 +264,10 @@ for c in sorted(cse_classes.keys()):
     print(cse_classes[c])
 
 
-# print(parser.classes[4].description)
+    # print(parser.classes[4].description)
 
-# csv_file = open('csecourses.csv', 'w', newline='')
-# csv_writer = csv.writer(csv_file)
-# csv_writer.writerow(['Code', 'Name', 'Description'])
-# for x in parser.classes:
-#     csv_writer.writerow([x.code, x.name, x.description])
+    # csv_file = open('csecourses.csv', 'w', newline='')
+    # csv_writer = csv.writer(csv_file)
+    # csv_writer.writerow(['Code', 'Name', 'Description'])
+    # for x in parser.classes:
+    #     csv_writer.writerow([x.code, x.name, x.description])
