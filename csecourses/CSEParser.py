@@ -27,9 +27,9 @@ class PROperator(object):
     Defines an operator between multiple prerequisites.
     """
 
-    def __init__(self, op_type="None"):
+    def __init__(self, op_type=""):
         """
-        :param op_type: and, or, None
+        :param op_type: and, or
         :return:
         """
         self.op_type = op_type
@@ -39,8 +39,8 @@ class PROperator(object):
         self.operands.append(op)
 
     def __str__(self):
-        if self.op_type == "None":
-            return self.op_type.upper()
+        if self.op_type is "":
+            return "NONE"
         return_string = "(" + str(self.operands[0]) + ")"
         for i in range(1, len(self.operands)):
             return_string += " " + self.op_type.upper() + " "
@@ -55,12 +55,16 @@ class PreRequisite(object):
         self.min_gpa = None
         self.code = None
         self.default = ""
-        self.parse(pr)
+        self.parse_old(pr)
 
-    def parse(self, pr):
-        code = self.parse_single_code(pr)
+    def parse_old(self, pr):
+        # APPROACH 2; Go word by word and interpret accordingly
+
+        # APPROACH 1: Try one style or another
+        code = PreRequisite.parse_single_code(pr)
         if code:
             self.code = code
+            return
 
         # MIN GPA
         if pr.startswith('minimum grade of'):
@@ -69,13 +73,19 @@ class PreRequisite(object):
             gpa = float(words[3])
             words = words[5:]
             # Parse rest of the code
-            #parsed = parse(words)
+            # parsed = parse(words)
         # EITHER-OR
         # CONCURRENTLY
         self.default = pr
         self.code = ClassCode()
 
-    def parse_single_code(self, pr):
+    @staticmethod
+    def parse(words, i=0):
+        """Recursive method. Recursively constructs PROperators and sub-PROperators."""
+        return PROperator()
+
+    @staticmethod
+    def parse_single_code(pr):
         try:
             # REGULAR PRE REQS
             # First, check to see if the pre-req ends in a number
@@ -208,7 +218,7 @@ class CSEHTMLParser(HTMLParser):
             setup = desc[desc.index("Prereq"):]
         except ValueError:
             # No prerequisites
-            self.cseClass.pre_reqs = PROperator("None")
+            self.cseClass.pre_reqs = PROperator()
             return
 
         # 2. Extract actual prereq string
@@ -255,10 +265,6 @@ for c in sorted(cse_classes.keys()):
                     # YAY
                     pr_class = cse_classes[pr.code.num]
                     pr_class.post_reqs.append(curr.code)
-                else:
-                    pass
-            else:
-                pass
 
 for c in sorted(cse_classes.keys()):
     print(cse_classes[c])
