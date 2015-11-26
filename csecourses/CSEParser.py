@@ -8,6 +8,14 @@ __author__ = 'Sarang Joshi'
 debug = True
 
 
+def is_number(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+
 class Timings(Enum):
     pre = 0
     concurrent = 1
@@ -38,6 +46,17 @@ class PROperator(object):
     def add(self, op):
         self.operands.append(op)
 
+    def apply_gpa(self, gpa):
+        # print(gpa)
+        for op in self.operands:
+            # if isinstance(op, PROperator):
+            # Recursively apply gpa restriction on all sub pre-reqs
+            op.apply_gpa(gpa)
+            # elif isinstance(op, PreRequisite):
+            #    op.min_gpa = gpa
+            if not (isinstance(op, PROperator) and isinstance(op, PreRequisite)):
+                print("fatal error!")
+
     def __str__(self):
         if self.op_type is "":
             return "NONE"
@@ -47,42 +66,95 @@ class PROperator(object):
             return_string += "(" + str(self.operands[i]) + ")"
         return return_string
 
+    @staticmethod
+    def parse(words, i=0):
+        """Recursive method. Recursively constructs PROperators and sub-PROperators.
+        :param words: collection of words
+        :param i: index in words
+        """
+        if words[i] == 'minimum':
+            # minimum grade of 2.5 in X
+            # words = pr.split(" ")
+            gpa = float(words[i + 3])
+            i += 5
+            # Parse rest of the code
+            parsed = PROperator.parse(words, i)
+            # Apply minimum gpa to all pre_reqs
+            parsed.apply_gpa(gpa)
+            # Return result
+            return parsed
+        elif words[i] == 'either':
+            # Go through and add everything up until you hit "or", then add the last one
+            i += 1
+            sub_words = []
+            prs = PROperator("or")
+
+            while True:
+                sub_words.append(words[i])
+                if words[i + 1] == "or":
+                    if words[i][-1] == ",":
+                        # Take off last comma
+                        sub_words[-1] = sub_words[-1][:-1]
+                    # This is a complete pre requisite
+                    prs.add(PROperator.parse(sub_words))
+                    i += 2
+                    sub_words.clear()
+                    sub_words.extend(words[i:])
+                    prs.add(PROperator.parse(sub_words))
+                    break
+                if words[i][-1] == ",":
+                    # Take off last comma
+                    sub_words[-1] = sub_words[-1][:-1]
+                    # This is a complete pre requisite
+                    prs.add(PROperator.parse(sub_words))
+                    sub_words.clear()
+                i += 1
+            return prs
+        elif words[i].isupper():
+            # TODO: Confirm that this is correct
+            # Keep traversing until we hit the course code
+            try:
+                dept_val = words[i]
+                i += 1
+                while not is_number(words[i][0]):
+                    dept_val += " " + words[i]
+                    i += 1
+                num_val = int(re.findall(r'\d+', words[i])[0])
+                parsed = PreRequisite()
+                parsed.code = ClassCode(dept_val, num_val)
+                return parsed
+            except IndexError:
+                pass
+
+        # TODO: CSE 474/E E 474
+
+        # Default
+        return PreRequisite(" ".join(words))
+
 
 class PreRequisite(object):
-    def __init__(self, pr):
+    def __init__(self, pr=""):
         self.equiv = False
         self.timing = Timings.pre
         self.min_gpa = None
         self.code = None
         self.default = ""
-        self.parse_old(pr)
+        if pr is not "":
+            self.parse_old(pr)
+
+    def apply_gpa(self, gpa):
+        self.min_gpa = gpa
 
     def parse_old(self, pr):
-        # APPROACH 2; Go word by word and interpret accordingly
-
-        # APPROACH 1: Try one style or another
+        """APPROACH 1: Try one style or another"""
         code = PreRequisite.parse_single_code(pr)
         if code:
             self.code = code
             return
 
-        # MIN GPA
-        if pr.startswith('minimum grade of'):
-            # minimum grade of 2.5 in X
-            words = pr.split(" ")
-            gpa = float(words[3])
-            words = words[5:]
-            # Parse rest of the code
-            # parsed = parse(words)
-        # EITHER-OR
-        # CONCURRENTLY
+        # Not regular class
         self.default = pr
         self.code = ClassCode()
-
-    @staticmethod
-    def parse(words, i=0):
-        """Recursive method. Recursively constructs PROperators and sub-PROperators."""
-        return PROperator()
 
     @staticmethod
     def parse_single_code(pr):
@@ -105,7 +177,7 @@ class PreRequisite(object):
             return None
 
     def __str__(self):
-        if self.code.num == 0:
+        if self.code.num is 0:
             return self.default
         return "[" + str(self.code) + "]"
 
@@ -116,10 +188,10 @@ class UWClass(object):
         """:type : ClassCode"""
         self.name = ""
         self.description = ""
+        # This is a single PROperator
         self.pre_reqs = None
-        """:type : PROperator"""
-        # TODO: rename AF
         # List of ClassCodes
+        # TODO: rename AF
         self.post_reqs = []
 
     def __str__(self):
@@ -131,6 +203,9 @@ class UWClass(object):
         string += ("\nPOST-REQS: " + str([str(x) for x in self.post_reqs]))
         string += "\n-----"
         return string
+
+
+approach = 2
 
 
 class CSEHTMLParser(HTMLParser):
@@ -168,7 +243,7 @@ class CSEHTMLParser(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "p" and self.inP:
             # Finished reading a single class
-            cse_classes[int(self.cseClass.code.num)] = self.cseClass
+            cse_classes[self.cseClass.code.num] = self.cseClass
             self.inP = False
         elif tag == "b" and self.inP:
             # set name of class
@@ -200,7 +275,7 @@ class CSEHTMLParser(HTMLParser):
     def parse_code(self, name):
         code = re.findall(r'\d+', name)
         # TODO: handle department
-        self.cseClass.code.num = code[0]
+        self.cseClass.code.num = int(code[0])
 
     def parse_description(self, desc):
         """
@@ -237,8 +312,11 @@ class CSEHTMLParser(HTMLParser):
             self.cseClass.pre_reqs = PROperator("and")
 
         for pr in prs:
-            # Convert from string to object and add to class
-            self.cseClass.pre_reqs.add(PreRequisite(pr))
+            if approach == 1:
+                # Convert from string to object and add to class
+                self.cseClass.pre_reqs.add(PreRequisite(pr))
+            elif approach == 2:
+                self.cseClass.pre_reqs.add(PROperator.parse(pr.split(" ")))
 
 
 # SETUP
@@ -259,16 +337,14 @@ for c in sorted(cse_classes.keys()):
     if pre_reqs is not None:
         # TODO: make PROperator iterable?
         for pr in pre_reqs.operands:
-            # TODO: Make better?
-            if pr.code.num != 0:
-                if pr.code.department == "CSE":
-                    # YAY
-                    pr_class = cse_classes[pr.code.num]
-                    pr_class.post_reqs.append(curr.code)
+            # TODO: what happens if pr is a PROperator?
+            if isinstance(pr, PreRequisite) and pr.code.num is not 0 and pr.code.department == "CSE":
+                # YAY
+                pr_class = cse_classes[pr.code.num]
+                pr_class.post_reqs.append(curr.code)
 
 for c in sorted(cse_classes.keys()):
     print(cse_classes[c])
-
 
     # print(parser.classes[4].description)
 
