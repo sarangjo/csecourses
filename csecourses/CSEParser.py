@@ -1,11 +1,10 @@
-# import csv
 import re
 from enum import Enum
 from html.parser import HTMLParser
 
 __author__ = 'Sarang Joshi'
 
-debug = True
+debug = False
 
 
 def is_number(s):
@@ -54,17 +53,32 @@ class PROperator(object):
             op.apply_gpa(gpa)
             # elif isinstance(op, PreRequisite):
             #    op.min_gpa = gpa
-            if not (isinstance(op, PROperator) and isinstance(op, PreRequisite)):
+            if not (isinstance(op, PROperator) or isinstance(op, PreRequisite)):
                 print("fatal error!")
 
     def __str__(self):
-        if self.op_type is "":
+        if self.is_none():
             return "NONE"
         return_string = "(" + str(self.operands[0]) + ")"
         for i in range(1, len(self.operands)):
             return_string += " " + self.op_type.upper() + " "
             return_string += "(" + str(self.operands[i]) + ")"
         return return_string
+
+    def get_all_classes(self):
+        """
+        :return: all classes contained in this operator, regardless of OR/AND
+        """
+        all_classes = []
+        for op in self.operands:
+            if isinstance(op, PreRequisite):
+                all_classes.append(op.code)
+            elif isinstance(op, PROperator):
+                all_classes.extend(op.get_all_classes())
+        return all_classes
+
+    def is_none(self):
+        return self.op_type is ""
 
     @staticmethod
     def parse(words, i=0):
@@ -133,51 +147,18 @@ class PROperator(object):
 
 
 class PreRequisite(object):
-    def __init__(self, pr=""):
+    def __init__(self, default=""):
         self.equiv = False
         self.timing = Timings.pre
         self.min_gpa = None
         self.code = None
-        self.default = ""
-        if pr is not "":
-            self.parse_old(pr)
+        self.default = default
 
     def apply_gpa(self, gpa):
         self.min_gpa = gpa
 
-    def parse_old(self, pr):
-        """APPROACH 1: Try one style or another"""
-        code = PreRequisite.parse_single_code(pr)
-        if code:
-            self.code = code
-            return
-
-        # Not regular class
-        self.default = pr
-        self.code = ClassCode()
-
-    @staticmethod
-    def parse_single_code(pr):
-        try:
-            # REGULAR PRE REQS
-            # First, check to see if the pre-req ends in a number
-            # CSE 143
-            code_val = int(pr[len(pr) - 3:])
-            regular = True
-            # Then, check to see if the text before the numbers are only caps
-            for i in pr:
-                if i != " " and i.islower():
-                    regular = False
-                    break
-            if regular:
-                # TODO: generalize to non-CSE
-                dept_val = pr[:len(pr) - 4]
-                return ClassCode(dept_val, code_val)
-        except ValueError:
-            return None
-
     def __str__(self):
-        if self.code.num is 0:
+        if self.code is None or self.code.num is 0:
             return self.default
         return "[" + str(self.code) + "]"
 
@@ -188,8 +169,8 @@ class UWClass(object):
         """:type : ClassCode"""
         self.name = ""
         self.description = ""
-        # This is a single PROperator
-        self.pre_reqs = None
+        # TODO: Make more efficient by not having any PROperator at all?
+        self.pre_reqs = PROperator()
         # List of ClassCodes
         # TODO: rename AF
         self.post_reqs = []
@@ -203,9 +184,6 @@ class UWClass(object):
         string += ("\nPOST-REQS: " + str([str(x) for x in self.post_reqs]))
         string += "\n-----"
         return string
-
-
-approach = 2
 
 
 class CSEHTMLParser(HTMLParser):
@@ -251,9 +229,6 @@ class CSEHTMLParser(HTMLParser):
             if not self.inDesc:
                 # start of description paragraph
                 self.inDesc = True
-        elif tag == "end":
-            # finished file
-            print('Finished!')
         elif tag == "a" and self.inDesc:
             # finished description paragraph
             self.inDesc = False
@@ -284,8 +259,6 @@ class CSEHTMLParser(HTMLParser):
         """
         self.cseClass.description = desc
         self.setup_pre_reqs(desc)
-        # if debug:
-        #    print("Prereqs: " + str(self.cseClass.pre_reqs))
 
     def setup_pre_reqs(self, desc):
         # 1. Check if the class has prereqs
@@ -293,7 +266,6 @@ class CSEHTMLParser(HTMLParser):
             setup = desc[desc.index("Prereq"):]
         except ValueError:
             # No prerequisites
-            self.cseClass.pre_reqs = PROperator()
             return
 
         # 2. Extract actual prereq string
@@ -312,11 +284,7 @@ class CSEHTMLParser(HTMLParser):
             self.cseClass.pre_reqs = PROperator("and")
 
         for pr in prs:
-            if approach == 1:
-                # Convert from string to object and add to class
-                self.cseClass.pre_reqs.add(PreRequisite(pr))
-            elif approach == 2:
-                self.cseClass.pre_reqs.add(PROperator.parse(pr.split(" ")))
+            self.cseClass.pre_reqs.add(PROperator.parse(pr.split(" ")))
 
 
 # SETUP
@@ -330,26 +298,30 @@ s = f.read()
 parser = CSEHTMLParser()
 parser.feed(s)
 
+print("Finished parsing part 1.")
+
 # 2. Go through all descriptions and extract prereqs + reverse prereqs
 for c in sorted(cse_classes.keys()):
     curr = cse_classes[c]
     pre_reqs = curr.pre_reqs
-    if pre_reqs is not None:
-        # TODO: make PROperator iterable?
-        for pr in pre_reqs.operands:
-            # TODO: what happens if pr is a PROperator?
-            if isinstance(pr, PreRequisite) and pr.code.num is not 0 and pr.code.department == "CSE":
+    # TODO: remove
+    if pre_reqs is None:
+        print("wat")
+    elif not pre_reqs.is_none():
+        # list of all codes
+        pre_req_list = pre_reqs.get_all_classes()
+
+        for code in pre_req_list:
+            # code is None if it's not a valid class
+            if code is not None and code.num is not 0 and code.department == "CSE":
                 # YAY
-                pr_class = cse_classes[pr.code.num]
-                pr_class.post_reqs.append(curr.code)
+                try:
+                    cse_classes[code.num].post_reqs.append(curr.code)
+                except KeyError:
+                    print("Invalid pre-req: " + str(code) + " for " + str(curr.code))
 
-for c in sorted(cse_classes.keys()):
-    print(cse_classes[c])
+if debug:
+    for c in sorted(cse_classes.keys()):
+        print(cse_classes[c])
 
-    # print(parser.classes[4].description)
-
-    # csv_file = open('csecourses.csv', 'w', newline='')
-    # csv_writer = csv.writer(csv_file)
-    # csv_writer.writerow(['Code', 'Name', 'Description'])
-    # for x in parser.classes:
-    #     csv_writer.writerow([x.code, x.name, x.description])
+print("Finished parsing part 2.")
