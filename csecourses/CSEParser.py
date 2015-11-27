@@ -1,10 +1,11 @@
+import csv
 import re
 from enum import Enum
 from html.parser import HTMLParser
 
 __author__ = 'Sarang Joshi'
 
-debug = False
+debug = True
 
 
 def is_number(s):
@@ -305,15 +306,13 @@ for c in sorted(cse_classes.keys()):
     curr = cse_classes[c]
     pre_reqs = curr.pre_reqs
     # TODO: remove
-    if pre_reqs is None:
-        print("wat")
-    elif not pre_reqs.is_none():
+    if not pre_reqs.is_none():
         # list of all codes
         pre_req_list = pre_reqs.get_all_classes()
 
         for code in pre_req_list:
             # code is None if it's not a valid class
-            if code is not None and code.num is not 0 and code.department == "CSE":
+            if code and code.num is not 0 and code.department == "CSE":
                 # YAY
                 try:
                     cse_classes[code.num].post_reqs.append(curr.code)
@@ -325,3 +324,12 @@ if debug:
         print(cse_classes[c])
 
 print("Finished parsing part 2.")
+
+# 3. Convert data from cse_classes into visualizable data
+csv_file = open('csecourses.csv', 'w', newline='')
+csv_writer = csv.writer(csv_file)
+
+csv_writer.writerow(['Number', 'Name'])
+for c in sorted(cse_classes.keys()):
+    curr = cse_classes[c]
+    csv_writer.writerow([curr.code.num, curr.name])
