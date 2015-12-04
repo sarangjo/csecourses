@@ -5,7 +5,7 @@ from html.parser import HTMLParser
 
 __author__ = 'Sarang Joshi'
 
-debug = True
+debug = False
 
 
 def is_number(s):
@@ -21,7 +21,7 @@ class Timings(Enum):
     concurrent = 1
 
 
-class ClassCode(object):
+class ClassCode():
     def __init__(self, department="", num=0):
         self.department = department
         self.num = num
@@ -325,11 +325,26 @@ if debug:
 
 print("Finished parsing part 2.")
 
+sorted_classes = sorted(cse_classes.keys())
+
 # 3. Convert data from cse_classes into visualizable data
 csv_file = open('csecourses.csv', 'w', newline='')
 csv_writer = csv.writer(csv_file)
 
-csv_writer.writerow(['Number', 'Name'])
-for c in sorted(cse_classes.keys()):
+csv_writer.writerow(['number', 'name'])
+for c in sorted_classes:
     curr = cse_classes[c]
     csv_writer.writerow([curr.code.num, curr.name])
+
+# Simply connect one class to the next
+# CSV?
+csv_file = open('courselinks.csv', 'w', newline='')
+csv_writer = csv.writer(csv_file)
+
+csv_writer.writerow(['Id', 'Start', 'End'])
+i = 0
+for c in sorted_classes:
+    curr = cse_classes[c]
+
+
+# JSON?
