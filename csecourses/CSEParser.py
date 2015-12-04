@@ -331,7 +331,7 @@ sorted_classes = sorted(cse_classes.keys())
 csv_file = open('csecourses.csv', 'w', newline='')
 csv_writer = csv.writer(csv_file)
 
-csv_writer.writerow(['Number', 'Name'])
+csv_writer.writerow(['number', 'name'])
 for c in sorted_classes:
     curr = cse_classes[c]
     csv_writer.writerow([curr.code.num, curr.name])
