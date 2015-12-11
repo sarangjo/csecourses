@@ -20,3 +20,8 @@ div.bar {
 	stroke: #777;
 	stroke-width: 2px;
 }
+
+d3-tip {
+	line-height: 1;
+	color: black;
+}
