@@ -85,6 +85,18 @@
                     .append("circle")
                     .attr("class", "node");
 
+                // Adding text to each node
+                var text = node.append("text")
+                    .attr({
+                        x: -10,
+                        y: 10,
+                        dy: ".35em"
+                    }).style("font-size", "10px")
+                    .text(function(d) {
+                        console.log(d);
+                        return d.name;
+                    });
+
                 force.on('end', function() {
                     node.attr('r', w/30)
                         .attr('cx', function(d) { return d.x; })
@@ -131,6 +143,6 @@
                 console.log(nodes);
             }
         </script>
-        <p>Hello World!</p>
+        <p>Welcome to UW CSE Courses!</p>
     </body>
 </html>
