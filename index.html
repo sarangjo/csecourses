@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>UW CSE Courses</title>
         <script type="text/javascript" src="d3/d3.min.js"></script>
+        <script type="text/javascript" src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
         <script src="http://d3js.org/queue.v1.min.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
@@ -11,6 +12,10 @@
         <script type="text/javascript">
             var w = 640;
             var h = 480;
+
+            // How many levels of classes we're considering
+            // 3 means 1xx 2xx and 3xx levels
+            var LEVELS = 3;
 
             var filenames = ["csecourses/testcourses.json", "csecourses/testlinks.json"];
 
@@ -34,6 +39,13 @@
              */
             function onFilesLoaded(err, results) {
                 var nodes = results[0];
+                // Sort by course number
+                nodes.sort(function(a, b) {
+                    return a.number - b.number;
+                });
+
+                console.log("Sorted");
+
                 var links = results[1];
 
                 setPositions(nodes);
@@ -42,22 +54,62 @@
                     .attr("width", w)
                     .attr("height", h);
 
+                /*svg.append("defs").selectAll("marker")
+                    .data(["suit", "licensing", "resolved"])
+                    .enter().append("marker")
+                        .attr("id", function(d) { return d; })
+                        .attr("viewBox", "0 -5 10 10")
+                        .attr("refX", 25)
+                        .attr("refY", 0)
+                        .attr("markerWidth", 6)
+                        .attr("markerHeight", 6)
+                        .attr("orient", "auto")
+                    .append("path")
+                        .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+                        .style("stroke", "#4679BD")
+                        .style("opacity", "0.6");*/
 
+                // Main part of force layout
                 var force = d3.layout.force()
                     .size([w, h])
                     .nodes(nodes)
                     .links(links);
 
+                // Tooltip that hovers over node
+                var tip = d3.tip()
+                    .attr('class', 'd3-tip')
+                    .offset([-10, -40])
+                    .html(function(d) {
+                        return d.number + "";
+                    });
+
+                svg.call(tip);
+
                 // Attaching nodes and links to the visualization
                 var link = svg.selectAll(".link")
                     .data(links).enter()
                     .append("line")
-                    .attr("class", "link");
+                    .attr("class", "link")
+                    .style("marker-end", "url(#suit)");
 
                 var node = svg.selectAll(".node")
                     .data(nodes).enter()
                     .append("circle")
-                    .attr("class", "node");
+                    .attr("class", "node")
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide);
+
+                // Adding text to each node
+                /*var text = node.append("text")
+                    .attr({
+                        x: -10,
+                        y: 10,
+                        dy: ".35em"
+                    }).style("font-size", "10px")
+                    .text(function(d) {
+                        console.log(d);
+                        return d.name;
+                    });*/
 
                 force.on('end', function() {
                     node.attr('r', w/30)
@@ -70,6 +122,8 @@
                         .attr('y2', function(d) { return d.target.y; });
 
                     console.log("Done!");
+
+                    d3.select("body").append("p").text("Done Loading!");
                 });
 
                 force.start();
@@ -79,23 +133,32 @@
              * Sets the positions of the given nodes.
              */
             function setPositions(nodes) {
-                for(var i = 0; i < 3; i++) {
-                    var n = nodes[i];
-                    console.log(n);
-                    n.x = 200 + 50*i;
-                    n.y = 200;
-                    console.log(n);
-                }
+                var BASE_X = 60;
+                var xCounter = 0;
+                var currentLevel = 1;
+                var size = 50;
 
-                nodes[3].x = 250;
-                nodes[3].y = 300;
-                console.log(nodes[3]);
+                nodes.forEach(function(n) {
+                    var level = Math.floor(n.number / 100);
+                    n.y = level * size;
 
+                    if (level != currentLevel) {
+                        currentLevel = level;
+                        xCounter = 0;
+                    }
+
+                    n.x = BASE_X + (xCounter * size);
+                    xCounter++;
+                });
+
+                // Doesn't allow force to actually modify the positions of the nodes
                 nodes.forEach(function(n) {
                     n.fixed = true;
                 });
+
+                console.log(nodes);
             }
         </script>
-        <p>Hello World!</p>
+        <p>Welcome to UW CSE Courses!</p>
     </body>
 </html>
