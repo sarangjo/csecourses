@@ -10,14 +10,13 @@
     </head>
     <body>
         <script type="text/javascript">
-            var w = 640;
+            var w = 2400;
             var h = 480;
 
             // How many levels of classes we're considering
-            // 3 means 1xx 2xx and 3xx levels
-            var LEVELS = 3;
+            var LEVELS = 4;
 
-            var filenames = ["csecourses/testcourses.json", "csecourses/testlinks.json"];
+            var filenames = ["csecourses/testcourses2.json", "csecourses/testlinks2.json"];
 
             loadFiles(filenames);
 
@@ -39,16 +38,9 @@
              */
             function onFilesLoaded(err, results) {
                 var nodes = results[0];
-                // Sort by course number
-                nodes.sort(function(a, b) {
-                    return a.number - b.number;
-                });
-
-                console.log("Sorted");
-
                 var links = results[1];
 
-                setPositions(nodes);
+                setupNodes(nodes);
 
                 var svg = d3.select("body").append("svg")
                     .attr("width", w)
@@ -86,18 +78,18 @@
                 svg.call(tip);
 
                 // Attaching nodes and links to the visualization
-                var link = svg.selectAll(".link")
-                    .data(links).enter()
-                    .append("line")
-                    .attr("class", "link")
-                    .style("marker-end", "url(#suit)");
-
                 var node = svg.selectAll(".node")
                     .data(nodes).enter()
                     .append("circle")
                     .attr("class", "node")
                     .on('mouseover', tip.show)
                     .on('mouseout', tip.hide);
+
+                var link = svg.selectAll(".link")
+                    .data(links).enter()
+                    .append("line")
+                    .attr("class", "link")
+                    .style("marker-end", "url(#suit)");
 
                 // Adding text to each node
                 /*var text = node.append("text")
@@ -112,7 +104,7 @@
                     });*/
 
                 force.on('end', function() {
-                    node.attr('r', w/30)
+                    node.attr('r', 20)
                         .attr('cx', function(d) { return d.x; })
                         .attr('cy', function(d) { return d.y; });
                 
@@ -129,31 +121,43 @@
                 force.start();
             }
 
+            ///////////// HELPER METHODS /////////////
+
             /**
-             * Sets the positions of the given nodes.
+             * Sorts and sets nodes' positions.
              */
-            function setPositions(nodes) {
+            function setupNodes(nodes) {
+                // Sort by course number
+                nodes.sort(function(a, b) {
+                    return a.number - b.number;
+                });
+
+                // Sets the positions of the given nodes
                 var BASE_X = 60;
-                var xCounter = 0;
+                var LEVEL_OFFSET = 150;
+                var NODE_SIZE = 50;
+                
                 var currentLevel = 1;
-                var size = 50;
+                var xCounter = 0;
+                var yShift = false;
 
                 nodes.forEach(function(n) {
                     var level = Math.floor(n.number / 100);
-                    n.y = level * size;
-
+                    level = (level != 1 ? level - 2 : level - 1);
+                    
+                    // Updates level
                     if (level != currentLevel) {
                         currentLevel = level;
                         xCounter = 0;
                     }
 
-                    n.x = BASE_X + (xCounter * size);
-                    xCounter++;
-                });
-
-                // Doesn't allow force to actually modify the positions of the nodes
-                nodes.forEach(function(n) {
+                    n.x = BASE_X + (xCounter * NODE_SIZE);
+                    n.y = (LEVEL_OFFSET / 2) + (level * LEVEL_OFFSET) + (yShift ? 30 : 0);
+                    // Doesn't allow force to actually modify the positions of the nodes
                     n.fixed = true;
+                    
+                    xCounter++;
+                    yShift = !yShift;
                 });
 
                 console.log(nodes);

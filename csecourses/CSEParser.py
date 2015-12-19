@@ -1,4 +1,5 @@
 import csv
+import json
 import re
 from enum import Enum
 from html.parser import HTMLParser
@@ -21,7 +22,7 @@ class Timings(Enum):
     concurrent = 1
 
 
-class ClassCode():
+class ClassCode:
     def __init__(self, department="", num=0):
         self.department = department
         self.num = num
@@ -30,7 +31,7 @@ class ClassCode():
         return self.department + " " + str(self.num)
 
 
-class PROperator(object):
+class PROperator:
     """
     Defines an operator between multiple prerequisites.
     """
@@ -68,7 +69,8 @@ class PROperator(object):
 
     def get_all_classes(self):
         """
-        :return: all classes contained in this operator, regardless of OR/AND
+        :return: list of PreRequisite objects
+        Gets all classes contained in this operator, regardless of OR/AND
         """
         all_classes = []
         for op in self.operands:
@@ -147,7 +149,7 @@ class PROperator(object):
         return PreRequisite(" ".join(words))
 
 
-class PreRequisite(object):
+class PreRequisite:
     def __init__(self, default=""):
         self.equiv = False
         self.timing = Timings.pre
@@ -164,7 +166,7 @@ class PreRequisite(object):
         return "[" + str(self.code) + "]"
 
 
-class UWClass(object):
+class UWClass:
     def __init__(self, department=""):
         self.code = ClassCode(department)
         """:type : ClassCode"""
@@ -180,11 +182,14 @@ class UWClass(object):
         string = "-----"
         string += ("\nCODE: " + str(self.code))
         string += ("\nNAME: " + self.name)
-        string += ("\nDESC: " + self.description)
         string += ("\nPRE-REQS: " + str(self.pre_reqs))
         string += ("\nPOST-REQS: " + str([str(x) for x in self.post_reqs]))
         string += "\n-----"
         return string
+
+    def get_json(self, id):
+        json_output = {"id": id, "number": self.code.num, "name": self.name}
+        return json_output
 
 
 class CSEHTMLParser(HTMLParser):
@@ -222,7 +227,8 @@ class CSEHTMLParser(HTMLParser):
     def handle_endtag(self, tag):
         if tag == "p" and self.inP:
             # Finished reading a single class
-            cse_classes[self.cseClass.code.num] = self.cseClass
+            cse_classes.append(self.cseClass)
+            code_ids[self.cseClass.code.num] = len(cse_classes) - 1
             self.inP = False
         elif tag == "b" and self.inP:
             # set name of class
@@ -259,9 +265,9 @@ class CSEHTMLParser(HTMLParser):
         :param desc: the description
         """
         self.cseClass.description = desc
-        self.setup_pre_reqs(desc)
+        self.set_pre_reqs(desc)
 
-    def setup_pre_reqs(self, desc):
+    def set_pre_reqs(self, desc):
         # 1. Check if the class has prereqs
         try:
             setup = desc[desc.index("Prereq"):]
@@ -288,8 +294,87 @@ class CSEHTMLParser(HTMLParser):
             self.cseClass.pre_reqs.add(PROperator.parse(pr.split(" ")))
 
 
+def set_post_reqs():
+    """
+    Sets post-reqs. Go through all descriptions and extract prereqs + "post-req"s
+    """
+    for curr in cse_classes:
+        pre_reqs = curr.pre_reqs
+        # TODO: remove
+        if not pre_reqs.is_none():
+            # list of all codes
+            pre_req_list = pre_reqs.get_all_classes()
+
+            for pre_req_code in pre_req_list:
+                # code is None if it's not a valid class
+                if pre_req_code and pre_req_code.num is not 0 and pre_req_code.department == "CSE":
+                    # YAY
+                    try:
+                        # Sets that class' post req
+                        cse_classes[code_ids[pre_req_code.num]].post_reqs.append(curr.code)
+                    except KeyError:
+                        print("Invalid pre-req: " + str(pre_req_code) + " for " + str(curr.code))
+
+
+def spit_json_data():
+    levels = 4
+
+    # NODES
+    nodes = []
+    id = 0
+    for cl in cse_classes:
+        if int(cl.code.num / 100) <= levels:
+            nodes.append(cl.get_json(id))
+            id += 1
+        else:
+            break
+
+    json_nodes_file = open('testcourses2.json', 'w')
+    json.dump(nodes, json_nodes_file, indent=4)
+    # print(json.dumps(nodes))
+
+    # LINKS
+    links = []
+    id = 0
+    for i in range(0, len(cse_classes)):
+        cl = cse_classes[i]
+        if int(cl.code.num / 100) <= levels:
+            pre_req_list = cl.pre_reqs.get_all_classes()
+            for pre_req in pre_req_list:
+                if pre_req.department == 'CSE':
+                    try:
+                        source = code_ids[pre_req.num]  # pre_req
+                        target = i  # cl
+                        links.append({'id': id, 'source': source, 'target': target})
+                        id += 1
+                    except KeyError:
+                        print("whups")
+        else:
+            break
+
+    json_links_file = open('testlinks2.json', 'w')
+    json.dump(links, json_links_file, indent=4)
+    # print(json.dumps(links, indent=4))
+
+
+
+def spit_csv_data():
+    csv_file = open('csecourses.csv', 'w', newline='')
+    csv_writer = csv.writer(csv_file)
+
+    csv_writer.writerow(['number', 'name'])
+    for c in cse_classes:
+        csv_writer.writerow([c.code.num, c.name])
+
+    # Simply connect one class to the next
+    # CSV?
+    csv_file = open('courselinks.csv', 'w', newline='')
+    csv_writer = csv.writer(csv_file)
+
+
 # SETUP
-cse_classes = {}
+cse_classes = []
+code_ids = {}  # code --> id
 
 # ALGORITHM
 # 1. Go through all classes and store the pre-reqs
@@ -299,52 +384,18 @@ s = f.read()
 parser = CSEHTMLParser()
 parser.feed(s)
 
+# cse_classes.sort(key=lambda x: x.code.num)
+# class_codes.sort()
+
 print("Finished parsing part 1.")
 
-# 2. Go through all descriptions and extract prereqs + reverse prereqs
-for c in sorted(cse_classes.keys()):
-    curr = cse_classes[c]
-    pre_reqs = curr.pre_reqs
-    # TODO: remove
-    if not pre_reqs.is_none():
-        # list of all codes
-        pre_req_list = pre_reqs.get_all_classes()
-
-        for code in pre_req_list:
-            # code is None if it's not a valid class
-            if code and code.num is not 0 and code.department == "CSE":
-                # YAY
-                try:
-                    cse_classes[code.num].post_reqs.append(curr.code)
-                except KeyError:
-                    print("Invalid pre-req: " + str(code) + " for " + str(curr.code))
-
-if debug:
-    for c in sorted(cse_classes.keys()):
-        print(cse_classes[c])
+set_post_reqs()
 
 print("Finished parsing part 2.")
 
-sorted_classes = sorted(cse_classes.keys())
-
 # 3. Convert data from cse_classes into visualizable data
-csv_file = open('csecourses.csv', 'w', newline='')
-csv_writer = csv.writer(csv_file)
-
-csv_writer.writerow(['number', 'name'])
-for c in sorted_classes:
-    curr = cse_classes[c]
-    csv_writer.writerow([curr.code.num, curr.name])
-
-# Simply connect one class to the next
-# CSV?
-csv_file = open('courselinks.csv', 'w', newline='')
-csv_writer = csv.writer(csv_file)
-
-csv_writer.writerow(['Id', 'Start', 'End'])
-i = 0
-for c in sorted_classes:
-    curr = cse_classes[c]
-
-
-# JSON?
+is_json = True
+if not is_json:
+    spit_csv_data()
+else:
+    spit_json_data()
