@@ -357,7 +357,6 @@ def spit_json_data():
     # print(json.dumps(links, indent=4))
 
 
-
 def spit_csv_data():
     csv_file = open('csecourses.csv', 'w', newline='')
     csv_writer = csv.writer(csv_file)

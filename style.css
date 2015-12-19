@@ -17,6 +17,7 @@ div.bar {
 }
 
 .link {
+	fill: none;
 	stroke: #777;
 	stroke-width: 2px;
 }

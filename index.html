@@ -46,9 +46,9 @@
                     .attr("width", w)
                     .attr("height", h);
 
-                /*svg.append("defs").selectAll("marker")
-                    .data(["suit", "licensing", "resolved"])
-                    .enter().append("marker")
+                svg.append("defs").selectAll("marker")
+                        .data(["regular"])
+                        .enter().append("marker")
                         .attr("id", function(d) { return d; })
                         .attr("viewBox", "0 -5 10 10")
                         .attr("refX", 25)
@@ -59,7 +59,7 @@
                     .append("path")
                         .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
                         .style("stroke", "#4679BD")
-                        .style("opacity", "0.6");*/
+                        .style("opacity", "0.6");
 
                 // Main part of force layout
                 var force = d3.layout.force()
@@ -78,6 +78,12 @@
                 svg.call(tip);
 
                 // Attaching nodes and links to the visualization
+                var link = svg.selectAll(".link")
+                    .data(links).enter()
+                    .append("line")
+                    .attr("class", "link")
+                    .style("marker-end", "url(#regular)");
+
                 var node = svg.selectAll(".node")
                     .data(nodes).enter()
                     .append("circle")
@@ -85,12 +91,7 @@
                     .on('mouseover', tip.show)
                     .on('mouseout', tip.hide);
 
-                var link = svg.selectAll(".link")
-                    .data(links).enter()
-                    .append("line")
-                    .attr("class", "link")
-                    .style("marker-end", "url(#suit)");
-
+                
                 // Adding text to each node
                 /*var text = node.append("text")
                     .attr({
