@@ -14,9 +14,9 @@
             var h = 480;
 
             // How many levels of classes we're considering
-            var LEVELS = 4;
+            var LEVELS = 3;
 
-            var filenames = ["csecourses/testcourses2.json", "csecourses/testlinks2.json"];
+            var filenames = ["csecourses/testcourses"+ LEVELS + ".json", "csecourses/testlinks"+ LEVELS + ".json"];
 
             loadFiles(filenames);
 
@@ -30,13 +30,13 @@
                 filenames.forEach(function(d) {
                     q.defer(d3.json, d);
                 });
-                q.awaitAll(onFilesLoaded);
+                q.awaitAll(onFilesLoaded, true);
             }
 
             /**
              * Called when the JSON files have been loaded.
              */
-            function onFilesLoaded(err, results) {
+            function onFilesLoaded(err, results, fixed) {
                 var nodes = results[0];
                 var links = results[1];
 
@@ -67,42 +67,24 @@
                     .nodes(nodes)
                     .links(links);
 
-                // Tooltip that hovers over node
-                var tip = d3.tip()
-                    .attr('class', 'd3-tip')
-                    .offset([-10, -40])
-                    .html(function(d) {
-                        return d.number + "";
-                    });
-
-                svg.call(tip);
-
                 // Attaching nodes and links to the visualization
                 var link = svg.selectAll(".link")
-                    .data(links).enter()
+                    .data(force.links()).enter()
                     .append("line")
                     .attr("class", "link")
+                    // Attaches marker (arrow) to the end of the link
+                    // As of now the regular link is just called "regular"
                     .style("marker-end", "url(#regular)");
 
                 var node = svg.selectAll(".node")
-                    .data(nodes).enter()
+                    .data(force.nodes()).enter()
                     .append("circle")
-                    .attr("class", "node")
-                    .on('mouseover', tip.show)
-                    .on('mouseout', tip.hide);
+                    .attr("class", "node");
 
-                
-                // Adding text to each node
-                /*var text = node.append("text")
-                    .attr({
-                        x: -10,
-                        y: 10,
-                        dy: ".35em"
-                    }).style("font-size", "10px")
-                    .text(function(d) {
-                        console.log(d);
-                        return d.name;
-                    });*/
+                var text = svg.selectAll(".text")
+                    .data(force.nodes()).enter()
+                    .append("text")
+                    .text(function(d) { return d.number; });
 
                 force.on('end', function() {
                     node.attr('r', 20)
@@ -113,6 +95,10 @@
                         .attr('y1', function(d) { return d.source.y; })
                         .attr('x2', function(d) { return d.target.x; })
                         .attr('y2', function(d) { return d.target.y; });
+
+                    text.attr("x", function(d) { return d.x - 12; })
+                        .attr("y", function(d) { return d.y + 5; });
+                    
 
                     console.log("Done!");
 

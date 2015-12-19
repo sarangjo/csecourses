@@ -1,0 +1,112 @@
+[
+    {
+        "number": 120,
+        "id": 0,
+        "name": "Computer Science Principles (5) NW, QSR"
+    },
+    {
+        "number": 131,
+        "id": 1,
+        "name": "Science and Art of Digital Photography (4) VLPA"
+    },
+    {
+        "number": 142,
+        "id": 2,
+        "name": "Computer Programming I (4) NW, QSR"
+    },
+    {
+        "number": 143,
+        "id": 3,
+        "name": "Computer Programming II (5) NW, QSR"
+    },
+    {
+        "number": 154,
+        "id": 4,
+        "name": "Web Programming (5) QSR"
+    },
+    {
+        "number": 160,
+        "id": 5,
+        "name": "Data Programming (4) NW, QSR"
+    },
+    {
+        "number": 190,
+        "id": 6,
+        "name": "Current Topics in Computer Science and Engineering (1-5, max. 15)"
+    },
+    {
+        "number": 311,
+        "id": 7,
+        "name": "Foundations of Computing I (4) QSR"
+    },
+    {
+        "number": 312,
+        "id": 8,
+        "name": "Foundations of Computing II (4) QSR"
+    },
+    {
+        "number": 331,
+        "id": 9,
+        "name": "Software Design and Implementation (4)"
+    },
+    {
+        "number": 332,
+        "id": 10,
+        "name": "Data Abstractions (4)"
+    },
+    {
+        "number": 333,
+        "id": 11,
+        "name": "Systems Programming (4)"
+    },
+    {
+        "number": 341,
+        "id": 12,
+        "name": "Programming Languages (4)"
+    },
+    {
+        "number": 344,
+        "id": 13,
+        "name": "Introduction to Data Management (4)"
+    },
+    {
+        "number": 351,
+        "id": 14,
+        "name": "The Hardware/Software Interface (4)"
+    },
+    {
+        "number": 352,
+        "id": 15,
+        "name": "Hardware Design and Implementation (4)"
+    },
+    {
+        "number": 369,
+        "id": 16,
+        "name": "Introduction to Digital Design (2)"
+    },
+    {
+        "number": 371,
+        "id": 17,
+        "name": "Design of Digital Circuits and Systems (5)"
+    },
+    {
+        "number": 373,
+        "id": 18,
+        "name": "Data Structures and Algorithms (3)"
+    },
+    {
+        "number": 374,
+        "id": 19,
+        "name": "Intermediate Programming Concepts and Tools (3)"
+    },
+    {
+        "number": 390,
+        "id": 20,
+        "name": "Special Topics in Computer Science and Engineering (1-5, max. 10)"
+    },
+    {
+        "number": 399,
+        "id": 21,
+        "name": "CSE Foreign Study (*)"
+    }
+]

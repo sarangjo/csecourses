@@ -317,7 +317,7 @@ def set_post_reqs():
 
 
 def spit_json_data():
-    levels = 4
+    levels = 3
 
     # NODES
     nodes = []
@@ -329,7 +329,7 @@ def spit_json_data():
         else:
             break
 
-    json_nodes_file = open('testcourses2.json', 'w')
+    json_nodes_file = open('testcourses' + str(levels) + '.json', 'w')
     json.dump(nodes, json_nodes_file, indent=4)
     # print(json.dumps(nodes))
 
@@ -352,7 +352,7 @@ def spit_json_data():
         else:
             break
 
-    json_links_file = open('testlinks2.json', 'w')
+    json_links_file = open('testlinks' + str(levels) + '.json', 'w')
     json.dump(links, json_links_file, indent=4)
     # print(json.dumps(links, indent=4))
 
