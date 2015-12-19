@@ -10,8 +10,8 @@
     </head>
     <body>
         <script type="text/javascript">
-            var w = 1200;
-            var h = 800;
+            var w = 2400;
+            var h = 480;
 
             // How many levels of classes we're considering
             var LEVELS = 4;
@@ -134,7 +134,7 @@
 
                 // Sets the positions of the given nodes
                 var BASE_X = 60;
-                var LEVEL_OFFSET = 85;
+                var LEVEL_OFFSET = 150;
                 var NODE_SIZE = 50;
                 
                 var currentLevel = 1;
@@ -143,6 +143,7 @@
 
                 nodes.forEach(function(n) {
                     var level = Math.floor(n.number / 100);
+                    level = (level != 1 ? level - 2 : level - 1);
                     
                     // Updates level
                     if (level != currentLevel) {
@@ -151,7 +152,7 @@
                     }
 
                     n.x = BASE_X + (xCounter * NODE_SIZE);
-                    n.y = (level * LEVEL_OFFSET) + (yShift ? 30 : 0);
+                    n.y = (LEVEL_OFFSET / 2) + (level * LEVEL_OFFSET) + (yShift ? 30 : 0);
                     // Doesn't allow force to actually modify the positions of the nodes
                     n.fixed = true;
                     
