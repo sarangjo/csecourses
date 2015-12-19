@@ -317,11 +317,13 @@ def set_post_reqs():
 
 
 def spit_json_data():
+    levels = 4
+
     # NODES
     nodes = []
     id = 0
     for cl in cse_classes:
-        if int(cl.code.num / 100) <= 3:
+        if int(cl.code.num / 100) <= levels:
             nodes.append(cl.get_json(id))
             id += 1
         else:
@@ -336,14 +338,17 @@ def spit_json_data():
     id = 0
     for i in range(0, len(cse_classes)):
         cl = cse_classes[i]
-        if int(cl.code.num / 100) <= 3:
+        if int(cl.code.num / 100) <= levels:
             pre_req_list = cl.pre_reqs.get_all_classes()
             for pre_req in pre_req_list:
                 if pre_req.department == 'CSE':
-                    source = code_ids[pre_req.num]  # pre_req
-                    target = i  # cl
-                    links.append({'id': id, 'source': source, 'target': target})
-                    id += 1
+                    try:
+                        source = code_ids[pre_req.num]  # pre_req
+                        target = i  # cl
+                        links.append({'id': id, 'source': source, 'target': target})
+                        id += 1
+                    except KeyError:
+                        print("whups")
         else:
             break
 

@@ -14,8 +14,7 @@
             var h = 800;
 
             // How many levels of classes we're considering
-            // 3 means 1xx 2xx and 3xx levels
-            var LEVELS = 3;
+            var LEVELS = 4;
 
             var filenames = ["csecourses/testcourses2.json", "csecourses/testlinks2.json"];
 
@@ -135,7 +134,7 @@
 
                 // Sets the positions of the given nodes
                 var BASE_X = 60;
-                var LEVEL_OFFSET = 70;
+                var LEVEL_OFFSET = 85;
                 var NODE_SIZE = 50;
                 
                 var currentLevel = 1;
@@ -155,7 +154,6 @@
                     n.y = (level * LEVEL_OFFSET) + (yShift ? 30 : 0);
                     // Doesn't allow force to actually modify the positions of the nodes
                     n.fixed = true;
-                
                     
                     xCounter++;
                     yShift = !yShift;
