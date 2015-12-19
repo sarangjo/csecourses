@@ -1,4 +1,5 @@
 import csv
+import json
 import re
 from enum import Enum
 from html.parser import HTMLParser
@@ -186,6 +187,10 @@ class UWClass(object):
         string += "\n-----"
         return string
 
+    def get_json(self, id):
+        json_output = {"id": id, "number": self.code.num, "name": self.name}
+        return json_output
+
 
 class CSEHTMLParser(HTMLParser):
     def error(self, message):
@@ -288,6 +293,70 @@ class CSEHTMLParser(HTMLParser):
             self.cseClass.pre_reqs.add(PROperator.parse(pr.split(" ")))
 
 
+def set_post_reqs():
+    """
+    Sets post-reqs. Go through all descriptions and extract prereqs + reverse prereqs
+    """
+    for c in sorted(cse_classes.keys()):
+        curr = cse_classes[c]
+        pre_reqs = curr.pre_reqs
+        # TODO: remove
+        if not pre_reqs.is_none():
+            # list of all codes
+            pre_req_list = pre_reqs.get_all_classes()
+
+            for code in pre_req_list:
+                # code is None if it's not a valid class
+                if code and code.num is not 0 and code.department == "CSE":
+                    # YAY
+                    try:
+                        cse_classes[code.num].post_reqs.append(curr.code)
+                    except KeyError:
+                        print("Invalid pre-req: " + str(code) + " for " + str(curr.code))
+
+
+def spit_json_data():
+    # NODES
+    nodes = []
+    id = 0
+    for c in sorted(cse_classes):
+        cl = cse_classes[c]
+        if int(cl.code.num / 100) is 1:
+            nodes.append(cl.get_json(id))
+            id += 1
+        else:
+            break
+
+    json_file = open('testcourses2.json', 'w')
+    json.dump(nodes, json_file, indent=4)
+    #print(json.dumps(nodes))
+
+    # LINKS
+    links = []
+
+
+
+def spit_csv_data():
+    csv_file = open('csecourses.csv', 'w', newline='')
+    csv_writer = csv.writer(csv_file)
+
+    csv_writer.writerow(['number', 'name'])
+    for c in sorted(cse_classes.keys()):
+        curr = cse_classes[c]
+        csv_writer.writerow([curr.code.num, curr.name])
+
+    # Simply connect one class to the next
+    # CSV?
+    csv_file = open('courselinks.csv', 'w', newline='')
+    csv_writer = csv.writer(csv_file)
+
+    csv_writer.writerow(['Id', 'Start', 'End'])
+    i = 0
+    for c in sorted(cse_classes.keys()):
+        curr = cse_classes[c]
+        # TODO do something
+
+
 # SETUP
 cse_classes = {}
 
@@ -301,50 +370,13 @@ parser.feed(s)
 
 print("Finished parsing part 1.")
 
-# 2. Go through all descriptions and extract prereqs + reverse prereqs
-for c in sorted(cse_classes.keys()):
-    curr = cse_classes[c]
-    pre_reqs = curr.pre_reqs
-    # TODO: remove
-    if not pre_reqs.is_none():
-        # list of all codes
-        pre_req_list = pre_reqs.get_all_classes()
-
-        for code in pre_req_list:
-            # code is None if it's not a valid class
-            if code and code.num is not 0 and code.department == "CSE":
-                # YAY
-                try:
-                    cse_classes[code.num].post_reqs.append(curr.code)
-                except KeyError:
-                    print("Invalid pre-req: " + str(code) + " for " + str(curr.code))
-
-if debug:
-    for c in sorted(cse_classes.keys()):
-        print(cse_classes[c])
+set_post_reqs()
 
 print("Finished parsing part 2.")
 
-sorted_classes = sorted(cse_classes.keys())
-
 # 3. Convert data from cse_classes into visualizable data
-csv_file = open('csecourses.csv', 'w', newline='')
-csv_writer = csv.writer(csv_file)
-
-csv_writer.writerow(['number', 'name'])
-for c in sorted_classes:
-    curr = cse_classes[c]
-    csv_writer.writerow([curr.code.num, curr.name])
-
-# Simply connect one class to the next
-# CSV?
-csv_file = open('courselinks.csv', 'w', newline='')
-csv_writer = csv.writer(csv_file)
-
-csv_writer.writerow(['Id', 'Start', 'End'])
-i = 0
-for c in sorted_classes:
-    curr = cse_classes[c]
-
-
-# JSON?
+is_json = True
+if not is_json:
+    spit_csv_data()
+else:
+    spit_json_data()

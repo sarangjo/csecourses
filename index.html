@@ -39,16 +39,9 @@
              */
             function onFilesLoaded(err, results) {
                 var nodes = results[0];
-                // Sort by course number
-                nodes.sort(function(a, b) {
-                    return a.number - b.number;
-                });
-
-                console.log("Sorted");
-
                 var links = results[1];
 
-                setPositions(nodes);
+                setupNodes(nodes);
 
                 var svg = d3.select("body").append("svg")
                     .attr("width", w)
@@ -129,10 +122,18 @@
                 force.start();
             }
 
+            ///////////// HELPER METHODS /////////////
+
             /**
-             * Sets the positions of the given nodes.
+             * Sorts and sets nodes' positions.
              */
-            function setPositions(nodes) {
+            function setupNodes(nodes) {
+                // Sort by course number
+                nodes.sort(function(a, b) {
+                    return a.number - b.number;
+                });
+
+                // Sets the positions of the given nodes
                 var BASE_X = 60;
                 var xCounter = 0;
                 var currentLevel = 1;
@@ -149,10 +150,8 @@
 
                     n.x = BASE_X + (xCounter * size);
                     xCounter++;
-                });
-
-                // Doesn't allow force to actually modify the positions of the nodes
-                nodes.forEach(function(n) {
+                    
+                    // Doesn't allow force to actually modify the positions of the nodes
                     n.fixed = true;
                 });
 
