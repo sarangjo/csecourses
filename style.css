@@ -17,8 +17,13 @@ div.bar {
 }
 
 .link {
+	fill: none;
 	stroke: #777;
 	stroke-width: 2px;
+}
+
+.text {
+	font: sans-serif;
 }
 
 d3-tip {

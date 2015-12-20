@@ -1,0 +1,332 @@
+[
+    {
+        "number": 120,
+        "name": "Computer Science Principles (5) NW, QSR",
+        "id": 0
+    },
+    {
+        "number": 131,
+        "name": "Science and Art of Digital Photography (4) VLPA",
+        "id": 1
+    },
+    {
+        "number": 142,
+        "name": "Computer Programming I (4) NW, QSR",
+        "id": 2
+    },
+    {
+        "number": 143,
+        "name": "Computer Programming II (5) NW, QSR",
+        "id": 3
+    },
+    {
+        "number": 154,
+        "name": "Web Programming (5) QSR",
+        "id": 4
+    },
+    {
+        "number": 160,
+        "name": "Data Programming (4) NW, QSR",
+        "id": 5
+    },
+    {
+        "number": 190,
+        "name": "Current Topics in Computer Science and Engineering (1-5, max. 15)",
+        "id": 6
+    },
+    {
+        "number": 311,
+        "name": "Foundations of Computing I (4) QSR",
+        "id": 7
+    },
+    {
+        "number": 312,
+        "name": "Foundations of Computing II (4) QSR",
+        "id": 8
+    },
+    {
+        "number": 331,
+        "name": "Software Design and Implementation (4)",
+        "id": 9
+    },
+    {
+        "number": 332,
+        "name": "Data Abstractions (4)",
+        "id": 10
+    },
+    {
+        "number": 333,
+        "name": "Systems Programming (4)",
+        "id": 11
+    },
+    {
+        "number": 341,
+        "name": "Programming Languages (4)",
+        "id": 12
+    },
+    {
+        "number": 344,
+        "name": "Introduction to Data Management (4)",
+        "id": 13
+    },
+    {
+        "number": 351,
+        "name": "The Hardware/Software Interface (4)",
+        "id": 14
+    },
+    {
+        "number": 352,
+        "name": "Hardware Design and Implementation (4)",
+        "id": 15
+    },
+    {
+        "number": 369,
+        "name": "Introduction to Digital Design (2)",
+        "id": 16
+    },
+    {
+        "number": 371,
+        "name": "Design of Digital Circuits and Systems (5)",
+        "id": 17
+    },
+    {
+        "number": 373,
+        "name": "Data Structures and Algorithms (3)",
+        "id": 18
+    },
+    {
+        "number": 374,
+        "name": "Intermediate Programming Concepts and Tools (3)",
+        "id": 19
+    },
+    {
+        "number": 390,
+        "name": "Special Topics in Computer Science and Engineering (1-5, max. 10)",
+        "id": 20
+    },
+    {
+        "number": 399,
+        "name": "CSE Foreign Study (*)",
+        "id": 21
+    },
+    {
+        "number": 401,
+        "name": "Introduction to Compiler Construction (4)",
+        "id": 22
+    },
+    {
+        "number": 403,
+        "name": "Software Engineering (4)",
+        "id": 23
+    },
+    {
+        "number": 410,
+        "name": "Computer Systems (3)",
+        "id": 24
+    },
+    {
+        "number": 413,
+        "name": "Programming Languages and Their Implementation (3)",
+        "id": 25
+    },
+    {
+        "number": 414,
+        "name": "Introduction to Database Systems (4)",
+        "id": 26
+    },
+    {
+        "number": 415,
+        "name": "Introduction to Artificial Intelligence (3) NW",
+        "id": 27
+    },
+    {
+        "number": 417,
+        "name": "Algorithms and Computational Complexity (3)",
+        "id": 28
+    },
+    {
+        "number": 421,
+        "name": "Introduction to Algorithms (3)",
+        "id": 29
+    },
+    {
+        "number": 427,
+        "name": "Computational Biology (3)",
+        "id": 30
+    },
+    {
+        "number": 428,
+        "name": "Computational Biology Capstone (5)",
+        "id": 31
+    },
+    {
+        "number": 431,
+        "name": "Introduction to Theory of Computation (3)",
+        "id": 32
+    },
+    {
+        "number": 440,
+        "name": "Introduction to HCI: User Interface Design, Prototyping, and Evaluation (5)",
+        "id": 33
+    },
+    {
+        "number": 441,
+        "name": "Advanced HCI: Advanced User Interface Design, Prototyping, and Evaluation (5)",
+        "id": 34
+    },
+    {
+        "number": 444,
+        "name": "Database Systems Internals (4)",
+        "id": 35
+    },
+    {
+        "number": 446,
+        "name": "Machine Learning (4)",
+        "id": 36
+    },
+    {
+        "number": 450,
+        "name": "Animation Production Seminar (1)",
+        "id": 37
+    },
+    {
+        "number": 451,
+        "name": "Introduction to Operating Systems (4)",
+        "id": 38
+    },
+    {
+        "number": 452,
+        "name": "Introduction to Distributed Systems (4)",
+        "id": 39
+    },
+    {
+        "number": 454,
+        "name": "Advanced Internet and Web Services (5)",
+        "id": 40
+    },
+    {
+        "number": 455,
+        "name": "Computer Vision (4)",
+        "id": 41
+    },
+    {
+        "number": 456,
+        "name": "Story Design for Computer Animation (4)",
+        "id": 42
+    },
+    {
+        "number": 457,
+        "name": "Computer Graphics (4)",
+        "id": 43
+    },
+    {
+        "number": 458,
+        "name": "Computer Animation (5)",
+        "id": 44
+    },
+    {
+        "number": 459,
+        "name": "Pre-Production for Collaborative Animation (5)",
+        "id": 45
+    },
+    {
+        "number": 460,
+        "name": "Animation Capstone (5)",
+        "id": 46
+    },
+    {
+        "number": 461,
+        "name": "Introduction to Computer-Communication Networks (4)",
+        "id": 47
+    },
+    {
+        "number": 464,
+        "name": "Advanced Topics in Digital Animation (1-5, max. 10)",
+        "id": 48
+    },
+    {
+        "number": 467,
+        "name": "Advanced Digital Design (4)",
+        "id": 49
+    },
+    {
+        "number": 469,
+        "name": "Computer Architecture I (5)",
+        "id": 50
+    },
+    {
+        "number": 470,
+        "name": "Computer Architecture II (4)",
+        "id": 51
+    },
+    {
+        "number": 472,
+        "name": "Introduction to Computational Linguistics (5) VLPA/NW",
+        "id": 52
+    },
+    {
+        "number": 473,
+        "name": "Introduction to Artificial Intelligence (3)",
+        "id": 53
+    },
+    {
+        "number": 474,
+        "name": "Introduction to Embedded Systems (4)",
+        "id": 54
+    },
+    {
+        "number": 475,
+        "name": "Embedded Systems Capstone (5)",
+        "id": 55
+    },
+    {
+        "number": 481,
+        "name": "Capstone Software Design (5, max. 15)",
+        "id": 56
+    },
+    {
+        "number": 484,
+        "name": "Computer Security (4)",
+        "id": 57
+    },
+    {
+        "number": 486,
+        "name": "Introduction to Synthetic Biology (3)",
+        "id": 58
+    },
+    {
+        "number": 487,
+        "name": "Advanced Systems and Synthetic Biology (3)",
+        "id": 59
+    },
+    {
+        "number": 488,
+        "name": "Laboratory Methods in Synthetic Biology (4)",
+        "id": 60
+    },
+    {
+        "number": 490,
+        "name": "Special Topics in Computer Science and Engineering (1-5, max. 15)",
+        "id": 61
+    },
+    {
+        "number": 495,
+        "name": "Project Practicum ([1-5]-, max. 5)",
+        "id": 62
+    },
+    {
+        "number": 497,
+        "name": "Undergraduate Research Seminar (1)",
+        "id": 63
+    },
+    {
+        "number": 498,
+        "name": "Senior Project ([1-9]-, max. 9)",
+        "id": 64
+    },
+    {
+        "number": 499,
+        "name": "Reading and Research (1-24, max. 24)",
+        "id": 65
+    }
+]
