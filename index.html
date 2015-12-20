@@ -10,11 +10,12 @@
     </head>
     <body>
         <script type="text/javascript">
-            var w = 2400;
+            var w = 720;//2400;
             var h = 480;
 
             // How many levels of classes we're considering
             var LEVELS = 3;
+            var NODE_SIZE = 20;
 
             // Whether nodes are fixed or not
             var fixed = false;
@@ -45,14 +46,13 @@
                 var nodes = results[0];
                 var links = results[1];
 
-                setupNodes(nodes);
-
-                console.log(fixed);
+                // Sort by course number
+                nodes.sort(function(a, b) {
+                    return a.number - b.number;
+                });
 
                 if (fixed) {
-                    nodes.forEach(function(n) {
-                        n.fixed = true;
-                    });
+                    setupNodes(nodes);
                 }
 
                 // Main part of force layout
@@ -63,7 +63,7 @@
 
                 if (!fixed) {
                     // Allows for movement of the nodes
-                    force.linkDistance(60)
+                    force.linkDistance(90)
                         .charge(-300)
                         .on("tick", tick)
                         .start();
@@ -95,7 +95,7 @@
                 // Link setup
                 link = svg.append("g").selectAll(".link")
                     .data(force.links()).enter()
-                    .append("line")
+                    .append("path")
                     .attr("class", "link")
                     // Attaches marker (arrow) to the end of the link
                     // As of now the regular link is just called "regular"
@@ -105,13 +105,23 @@
                 node = svg.append("g").selectAll(".node")
                     .data(force.nodes()).enter()
                     .append("circle")
-                    .attr('r', 20)
+                    .attr('r', NODE_SIZE)
                     .attr("class", "node");
 
-                /*text = svg.append("g").selectAll(".text")
+                if (!fixed) {
+                    node.call(force.drag);
+                }
+
+                // Text setup
+                text = svg.append("g").selectAll(".text")
                     .data(force.nodes()).enter()
                     .append("text")
-                    .text(function(d) { return d.number; });*/
+                    .text(function(d) { return d.number; });
+
+                if (!fixed) {
+                    text.attr("x", 25)
+                        .attr("y", ".31em");
+                }
 
                 if(fixed) {
                     force.on('end', function() {
@@ -123,8 +133,8 @@
                             .attr('x2', function(d) { return d.target.x; })
                             .attr('y2', function(d) { return d.target.y; });
     
-                        //text.attr("x", function(d) { return d.x - 12; })
-                        //    .attr("y", function(d) { return d.y + 5; });
+                        text.attr("x", function(d) { return d.x - 12; })
+                            .attr("y", function(d) { return d.y + 5; });
                         
     
                         console.log("Done!");
@@ -137,9 +147,9 @@
             }
 
             function tick() {
-                link.attr("d", linkArc);
+                link.attr("d", linkLine);
                 node.attr("transform", transform);
-                //text.attr("transform", transform);
+                text.attr("transform", transform);
             }
 
             function linkArc(d) {
@@ -147,6 +157,10 @@
                     dy = d.target.y - d.source.y,
                     dr = Math.sqrt(dx * dx + dy * dy);
                 return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+            }
+
+            function linkLine(d) {
+                return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
             }
 
             function transform(d) {
@@ -161,15 +175,10 @@
              * Sorts and sets nodes' positions.
              */
             function setupNodes(nodes) {
-                // Sort by course number
-                nodes.sort(function(a, b) {
-                    return a.number - b.number;
-                });
-
                 // Sets the positions of the given nodes
                 var BASE_X = 60;
                 var LEVEL_OFFSET = 150;
-                var NODE_SIZE = 50;
+                var NODE_OFFSET = 30;
                 
                 var currentLevel = 1;
                 var xCounter = 0;
@@ -185,10 +194,10 @@
                         xCounter = 0;
                     }
 
-                    n.x = BASE_X + (xCounter * NODE_SIZE);
+                    n.x = BASE_X + (xCounter * (NODE_SIZE + NODE_OFFSET));
                     n.y = (LEVEL_OFFSET / 2) + (level * LEVEL_OFFSET) + (yShift ? 30 : 0);
                     // Doesn't allow force to actually modify the positions of the nodes
-                    //n.fixed = true;
+                    n.fixed = true;
                     
                     xCounter++;
                     yShift = !yShift;
