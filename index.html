@@ -16,6 +16,11 @@
             // How many levels of classes we're considering
             var LEVELS = 3;
 
+            // Whether nodes are fixed or not
+            var fixed = false;
+
+            var link, node, text;
+
             var filenames = ["csecourses/testcourses"+ LEVELS + ".json", "csecourses/testlinks"+ LEVELS + ".json"];
 
             loadFiles(filenames);
@@ -30,45 +35,25 @@
                 filenames.forEach(function(d) {
                     q.defer(d3.json, d);
                 });
-                q.awaitAll(onFilesLoaded, true);
+                q.awaitAll(onFilesLoaded);
             }
 
             /**
              * Called when the JSON files have been loaded.
              */
-            function onFilesLoaded(err, results, fixed) {
+            function onFilesLoaded(err, results) {
                 var nodes = results[0];
                 var links = results[1];
 
                 setupNodes(nodes);
 
-                var svg = d3.select("body").append("svg")
-                    .attr("width", w)
-                    .attr("height", h);
+                console.log(fixed);
 
-                svg.append("defs").selectAll("marker")
-                        .data(["regular"])
-                        .enter().append("marker")
-                        .attr("id", function(d) { return d; })
-                        .attr("viewBox", "0 -5 10 10")
-                        .attr("refX", 15)
-                        .attr("refY", -1.5)
-                        .attr("markerWidth", 6)
-                        .attr("markerHeight", 6)
-                        .attr("orient", "auto")
-                    .append("path")
-                        .attr("d", "M0,-5L10,0L0,5");
-    /*.attr("id", function(d) { return d; })
-                        .attr("viewBox", "0 -5 10 10")
-                        .attr("refX", 25)
-                        .attr("refY", 0)
-                        .attr("markerWidth", 5)
-                        .attr("markerHeight", 5)
-                        .attr("orient", "auto")
-                    .append("path")
-                        .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
-                        .style("stroke", "#4679BD")
-                        .style("opacity", "1.0");*/
+                if (fixed) {
+                    nodes.forEach(function(n) {
+                        n.fixed = true;
+                    });
+                }
 
                 // Main part of force layout
                 var force = d3.layout.force()
@@ -76,8 +61,39 @@
                     .nodes(nodes)
                     .links(links);
 
+                if (!fixed) {
+                    // Allows for movement of the nodes
+                    force.linkDistance(60)
+                        .charge(-300)
+                        .on("tick", tick)
+                        .start();
+                }
+
+                // Access to the SVG container
+                var svg = d3.select("body").append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+                svg.append("defs").selectAll("marker")
+                        .data(["regular"]).enter()
+                    .append("marker")
+                        .attr("id", function(d) { return d; })
+                        // Viewport for the arrow
+                        .attr("viewBox", "0 -5 10 10")
+                        // Offset from the center of the node
+                        .attr("refX", 27)
+                        .attr("refY", 0)
+                        // These are just bounding-box attributes
+                        .attr("markerWidth", 6)
+                        .attr("markerHeight", 6)
+                        .attr("orient", "auto")
+                    .append("path")
+                        // Draws the triangle, pointing right. M denotes start, L is each point
+                        .attr("d", "M0,-5L10,0L0,5");
+
                 // Attaching nodes and links to the visualization
-                var link = svg.selectAll(".link")
+                // Link setup
+                link = svg.append("g").selectAll(".link")
                     .data(force.links()).enter()
                     .append("line")
                     .attr("class", "link")
@@ -85,37 +101,59 @@
                     // As of now the regular link is just called "regular"
                     .style("marker-end", "url(#regular)");
 
-                var node = svg.selectAll(".node")
+                // Node setup
+                node = svg.append("g").selectAll(".node")
                     .data(force.nodes()).enter()
                     .append("circle")
+                    .attr('r', 20)
                     .attr("class", "node");
 
-                var text = svg.selectAll(".text")
+                /*text = svg.append("g").selectAll(".text")
                     .data(force.nodes()).enter()
                     .append("text")
-                    .text(function(d) { return d.number; });
+                    .text(function(d) { return d.number; });*/
 
-                force.on('end', function() {
-                    node.attr('r', 20)
-                        .attr('cx', function(d) { return d.x; })
-                        .attr('cy', function(d) { return d.y; });
-                
-                    link.attr('x1', function(d) { return d.source.x; })
-                        .attr('y1', function(d) { return d.source.y; })
-                        .attr('x2', function(d) { return d.target.x; })
-                        .attr('y2', function(d) { return d.target.y; });
-
-                    text.attr("x", function(d) { return d.x - 12; })
-                        .attr("y", function(d) { return d.y + 5; });
+                if(fixed) {
+                    force.on('end', function() {
+                        node.attr('cx', function(d) { return d.x; })
+                            .attr('cy', function(d) { return d.y; });
                     
-
-                    console.log("Done!");
-
-                    d3.select("body").append("p").text("Done Loading!");
-                });
-
-                force.start();
+                        link.attr('x1', function(d) { return d.source.x; })
+                            .attr('y1', function(d) { return d.source.y; })
+                            .attr('x2', function(d) { return d.target.x; })
+                            .attr('y2', function(d) { return d.target.y; });
+    
+                        //text.attr("x", function(d) { return d.x - 12; })
+                        //    .attr("y", function(d) { return d.y + 5; });
+                        
+    
+                        console.log("Done!");
+    
+                        d3.select("body").append("p").text("Done Loading!");
+                    });
+    
+                    force.start();
+                }
             }
+
+            function tick() {
+                link.attr("d", linkArc);
+                node.attr("transform", transform);
+                //text.attr("transform", transform);
+            }
+
+            function linkArc(d) {
+                var dx = d.target.x - d.source.x,
+                    dy = d.target.y - d.source.y,
+                    dr = Math.sqrt(dx * dx + dy * dy);
+                return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+            }
+
+            function transform(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            }
+
+                
 
             ///////////// HELPER METHODS /////////////
 
@@ -150,7 +188,7 @@
                     n.x = BASE_X + (xCounter * NODE_SIZE);
                     n.y = (LEVEL_OFFSET / 2) + (level * LEVEL_OFFSET) + (yShift ? 30 : 0);
                     // Doesn't allow force to actually modify the positions of the nodes
-                    n.fixed = true;
+                    //n.fixed = true;
                     
                     xCounter++;
                     yShift = !yShift;
