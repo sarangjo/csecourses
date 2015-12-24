@@ -210,7 +210,7 @@ class CSEHTMLParser(HTMLParser):
         if tag == "a" and not self.inP:
             # class code before paragraph
             self.cseClass = UWClass("CSE")
-            self.parse_code(attrs[0][1])
+            self.cseClass.code.num = get_code_from_tag(attrs[0][1])
         elif tag == "p":
             # entered a new class paragraph
             self.inP = True
@@ -220,7 +220,7 @@ class CSEHTMLParser(HTMLParser):
 
     def handle_data(self, data):
         if self.inName:
-            self.parse_name(data)
+            self.cseClass.name = get_name_from_data(data)
         elif self.inDesc:
             self.parse_description(data)
 
@@ -239,25 +239,6 @@ class CSEHTMLParser(HTMLParser):
         elif tag == "a" and self.inDesc:
             # finished description paragraph
             self.inDesc = False
-
-    def parse_name(self, name):
-        """Parses the name of the class.
-        :param name:
-        """
-        # TODO: Remove the code
-        words = name.split(" ")
-        i = 0
-        for i in range(0, len(words)):
-            if words[i][0].isdigit():
-                break
-
-        words = words[i + 1:]
-        self.cseClass.name = " ".join(words)
-
-    def parse_code(self, name):
-        code = re.findall(r'\d+', name)
-        # TODO: handle department
-        self.cseClass.code.num = int(code[0])
 
     def parse_description(self, desc):
         """
@@ -293,25 +274,25 @@ class CSEHTMLParser(HTMLParser):
         for pr in prs:
             self.cseClass.pre_reqs.add(PROperator.parse(pr.split(" ")))
 
+
 class CSEHTMLParser2(HTMLParser):
-def error(self, message):
+    def error(self, message):
         print("SOMEONE SCREWED UP: " + message)
 
     def __init__(self):
         super().__init__()
         # parsing fields
-        self.inDesc = False
         self.inName = False
         self.inP = False
         self.inTitle = False
         # other fields
-        self.cseClass = None
+        self.num = 0
 
     def handle_starttag(self, tag, attrs):
         if tag == "a" and not self.inP:
             # class code before paragraph
-            self.cseClass = UWClass("CSE")
-            self.parse_code(attrs[0][1])
+            self.num = int(re.findall(r'\d+', (attrs[0][1]))[0])
+            nodes[self.num] = {"number": self.num}
         elif tag == "p":
             # entered a new class paragraph
             self.inP = True
@@ -321,78 +302,41 @@ def error(self, message):
 
     def handle_data(self, data):
         if self.inName:
-            self.parse_name(data)
-        elif self.inDesc:
-            self.parse_description(data)
+            # TODO: Remove the code
+            words = data.split(" ")
+            i = 0
+            for i in range(0, len(words)):
+                if words[i][0].isdigit():
+                    break
+
+            words = words[i + 1:]
+            nodes[self.num]["name"] = " ".join(words)
 
     def handle_endtag(self, tag):
         if tag == "p" and self.inP:
             # Finished reading a single class
-            cse_classes.append(self.cseClass)
-            code_ids[self.cseClass.code.num] = len(cse_classes) - 1
             self.inP = False
         elif tag == "b" and self.inP:
             # set name of class
             self.inName = False
-            if not self.inDesc:
-                # start of description paragraph
-                self.inDesc = True
-        elif tag == "a" and self.inDesc:
-            # finished description paragraph
-            self.inDesc = False
 
-    def parse_name(self, name):
-        """Parses the name of the class.
-        :param name:
-        """
-        # TODO: Remove the code
-        words = name.split(" ")
-        i = 0
-        for i in range(0, len(words)):
-            if words[i][0].isdigit():
-                break
 
-        words = words[i + 1:]
-        self.cseClass.name = " ".join(words)
+def get_code_from_tag(tag):
+    code = re.findall(r'\d+', tag)
+    # TODO: handle department
+    return int(code[0])
 
-    def parse_code(self, name):
-        code = re.findall(r'\d+', name)
-        # TODO: handle department
-        self.cseClass.code.num = int(code[0])
 
-    def parse_description(self, desc):
-        """
-        Parses the description of a class into prerequisites.
-        :param desc: the description
-        """
-        self.cseClass.description = desc
-        self.set_pre_reqs(desc)
+def get_name_from_data(data):
+    # TODO: Remove the code
+    words = data.split(" ")
+    i = 0
+    for i in range(0, len(words)):
+        if words[i][0].isdigit():
+            break
 
-    def set_pre_reqs(self, desc):
-        # 1. Check if the class has prereqs
-        try:
-            setup = desc[desc.index("Prereq"):]
-        except ValueError:
-            # No prerequisites
-            return
-
-        # 2. Extract actual prereq string
-        try:
-            # TODO: Handle not ending with a period (not terribly necessary)
-            # There is other text after the prerequisite
-            end_index = setup.index(". ")
-        except ValueError:
-            # Prereq is the last thing in the description
-            end_index = len(setup) - 1
-        setup = setup[(setup.index(" ") + 1):end_index]
-
-        # 3. Parse out individual pre_reqs
-        prs = setup.split("; ")
-        if len(prs) > 0:
-            self.cseClass.pre_reqs = PROperator("and")
-
-        for pr in prs:
-            self.cseClass.pre_reqs.add(PROperator.parse(pr.split(" ")))
+    words = words[i + 1:]
+    return " ".join(words)
 
 
 def set_post_reqs():
@@ -472,11 +416,11 @@ def spit_csv_data():
     csv_writer = csv.writer(csv_file)
 
 
-# SETUP
+# ALGORITHM 1
+# 0. Setup
 cse_classes = []
 code_ids = {}  # code --> id
 
-# ALGORITHM
 # 1. Go through all classes and store the pre-reqs
 f = open('cse.html')
 s = f.read()
@@ -499,3 +443,15 @@ if not is_json:
     spit_csv_data()
 else:
     spit_json_data()
+
+# ALGORITHM 2
+# 0. Setup
+nodes = {}
+
+# 1. Use the alternate parser. First run, simply construct the nodes map, which maps from class code
+# to a map of all the details
+f = open('cse.html')
+s = f.read()
+
+parser = CSEHTMLParser2()
+parser.feed(s)
