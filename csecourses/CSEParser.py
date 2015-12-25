@@ -85,13 +85,12 @@ class PROperator:
 
     @staticmethod
     def parse(words, i=0):
-        """Recursive method. Recursively constructs PROperators and sub-PROperators.
+        """Recursively constructs PROperators and sub-PROperators.
         :param words: collection of words
         :param i: index in words
         """
         if words[i] == 'minimum':
             # minimum grade of 2.5 in X
-            # words = pr.split(" ")
             gpa = float(words[i + 3])
             i += 5
             # Parse rest of the code
@@ -202,7 +201,6 @@ class CSEHTMLParser(HTMLParser):
         self.inDesc = False
         self.inName = False
         self.inP = False
-        self.inTitle = False
         # other fields
         self.cseClass = None
 
@@ -230,8 +228,8 @@ class CSEHTMLParser(HTMLParser):
             cse_classes.append(self.cseClass)
             code_ids[self.cseClass.code.num] = len(cse_classes) - 1
             self.inP = False
-        elif tag == "b" and self.inP:
-            # set name of class
+        elif tag == "b" and self.inName:
+            # finished name
             self.inName = False
             if not self.inDesc:
                 # start of description paragraph
@@ -249,94 +247,12 @@ class CSEHTMLParser(HTMLParser):
         self.set_pre_reqs(desc)
 
     def set_pre_reqs(self, desc):
-        # 1. Check if the class has prereqs
-        try:
-            setup = desc[desc.index("Prereq"):]
-        except ValueError:
-            # No prerequisites
-            return
-
-        # 2. Extract actual prereq string
-        try:
-            # TODO: Handle not ending with a period (not terribly necessary)
-            # There is other text after the prerequisite
-            end_index = setup.index(". ")
-        except ValueError:
-            # Prereq is the last thing in the description
-            end_index = len(setup) - 1
-        setup = setup[(setup.index(" ") + 1):end_index]
-
-        # 3. Parse out individual pre_reqs
-        prs = setup.split("; ")
+        prs = get_pre_reqs_from_description(desc)
         if len(prs) > 0:
             self.cseClass.pre_reqs = PROperator("and")
 
         for pr in prs:
             self.cseClass.pre_reqs.add(PROperator.parse(pr.split(" ")))
-
-
-class CSEHTMLParser2(HTMLParser):
-    def error(self, message):
-        print("SOMEONE SCREWED UP: " + message)
-
-    def __init__(self):
-        super().__init__()
-        # parsing fields
-        self.inName = False
-        self.inP = False
-        self.inTitle = False
-        # other fields
-        self.num = 0
-
-    def handle_starttag(self, tag, attrs):
-        if tag == "a" and not self.inP:
-            # class code before paragraph
-            self.num = int(re.findall(r'\d+', (attrs[0][1]))[0])
-            nodes[self.num] = {"number": self.num}
-        elif tag == "p":
-            # entered a new class paragraph
-            self.inP = True
-        elif tag == "b" and self.inP:
-            # set name
-            self.inName = True
-
-    def handle_data(self, data):
-        if self.inName:
-            # TODO: Remove the code
-            words = data.split(" ")
-            i = 0
-            for i in range(0, len(words)):
-                if words[i][0].isdigit():
-                    break
-
-            words = words[i + 1:]
-            nodes[self.num]["name"] = " ".join(words)
-
-    def handle_endtag(self, tag):
-        if tag == "p" and self.inP:
-            # Finished reading a single class
-            self.inP = False
-        elif tag == "b" and self.inP:
-            # set name of class
-            self.inName = False
-
-
-def get_code_from_tag(tag):
-    code = re.findall(r'\d+', tag)
-    # TODO: handle department
-    return int(code[0])
-
-
-def get_name_from_data(data):
-    # TODO: Remove the code
-    words = data.split(" ")
-    i = 0
-    for i in range(0, len(words)):
-        if words[i][0].isdigit():
-            break
-
-    words = words[i + 1:]
-    return " ".join(words)
 
 
 def set_post_reqs():
@@ -365,17 +281,17 @@ def spit_json_data():
     levels = 3
 
     # NODES
-    nodes = []
+    json_nodes = []
     id = 0
     for cl in cse_classes:
         if int(cl.code.num / 100) <= levels:
-            nodes.append(cl.get_json(id))
+            json_nodes.append(cl.get_json(id))
             id += 1
         else:
             break
 
     json_nodes_file = open('testcourses' + str(levels) + '.json', 'w')
-    json.dump(nodes, json_nodes_file, indent=4)
+    json.dump(json_nodes, json_nodes_file, indent=4)
     # print(json.dumps(nodes))
 
     # LINKS
@@ -416,42 +332,229 @@ def spit_csv_data():
     csv_writer = csv.writer(csv_file)
 
 
+def get_code_from_tag(tag):
+    code = re.findall(r'\d+', tag)
+    # TODO: handle department
+    return int(code[0])
+
+
+def get_name_from_data(data):
+    # TODO: Remove the code
+    words = data.split(" ")
+    i = 0
+    for i in range(0, len(words)):
+        if words[i][0].isdigit():
+            break
+
+    words = words[i + 1:]
+    return " ".join(words)
+
+
+def get_pre_reqs_from_description(desc):
+    # 1. Check if the class has prereqs
+    try:
+        setup = desc[desc.index("Prereq"):]
+    except ValueError:
+        # No prerequisites
+        return []
+
+    # 2. Extract actual prereq string
+    try:
+        # TODO: Handle not ending with a period (not terribly necessary)
+        # There is other text after the prerequisite
+        end_index = setup.index(". ")
+    except ValueError:
+        # Prereq is the last thing in the description
+        end_index = len(setup) - 1
+    setup = setup[(setup.index(" ") + 1):end_index]
+
+    # 3. Parse out individual pre_reqs
+    prs = setup.split("; ")
+    return prs
+
+
 # ALGORITHM 1
 # 0. Setup
 cse_classes = []
 code_ids = {}  # code --> id
 
-# 1. Go through all classes and store the pre-reqs
-f = open('cse.html')
-s = f.read()
 
-parser = CSEHTMLParser()
-parser.feed(s)
+def alg_1():
+    # 1. Go through all classes and store the pre-reqs
+    f = open('cse.html')
+    s = f.read()
 
-# cse_classes.sort(key=lambda x: x.code.num)
-# class_codes.sort()
+    parser = CSEHTMLParser()
+    parser.feed(s)
 
-print("Finished parsing part 1.")
+    # cse_classes.sort(key=lambda x: x.code.num)
+    # class_codes.sort()
 
-set_post_reqs()
+    print("Finished parsing part 1.")
 
-print("Finished parsing part 2.")
+    set_post_reqs()
 
-# 3. Convert data from cse_classes into visualizable data
-is_json = True
-if not is_json:
-    spit_csv_data()
-else:
-    spit_json_data()
+    print("Finished parsing part 2.")
+
+    # 3. Convert data from cse_classes into visualizable data
+    is_json = True
+    if not is_json:
+        spit_csv_data()
+    else:
+        spit_json_data()
+
+
+class CSEHTMLParser2(HTMLParser):
+    def error(self, message):
+        print("SOMEONE SCREWED UP: " + message)
+
+    def __init__(self):
+        super().__init__()
+        # parsing fields
+        self.inName = False
+        self.inP = False
+        self.inDesc = False
+        # other fields
+        self.num = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "a" and not self.inP:
+            # class code before paragraph
+            self.num = get_code_from_tag(attrs[0][1]) # int(re.findall(r'\d+', (attrs[0][1]))[0])
+            nodes[self.num] = {"number": self.num}
+        elif tag == "p":
+            # entered a new class paragraph
+            self.inP = True
+        elif tag == "b" and self.inP:
+            # set name
+            self.inName = True
+        elif tag == "br" and self.inP:
+            self.inDesc = True
+
+    def handle_data(self, data):
+        if self.inName:
+            nodes[self.num]["name"] = get_name_from_data(data)
+        elif self.inDesc:
+            nodes[self.num]["description"] = data
+
+    def handle_endtag(self, tag):
+        if tag == "p" and self.inP:
+            # finished a single class
+            self.inP = False
+        elif tag == "b" and self.inName:
+            # finished name
+            self.inName = False
+        elif tag == "a" and self.inDesc:
+            # finished description paragraph
+            self.inDesc = False
+
+
+def parse_links_from_pre_req(target, words, i=0):
+    """Recursively adds links to the links list, for a single pre-req string.
+    :param target: end node
+    :param words: collection of words
+    :param i: index in words
+    :returns: list of links
+    """
+    # TODO: Return something or directly append?
+    if words[i] == 'minimum':
+        # minimum grade of 2.5 in X
+        gpa = float(words[i + 3])
+        i += 5
+        # Parse rest of the code
+        parsed = parse_links_from_pre_req(target, words, i)
+        # Apply minimum gpa to all pre_reqs
+        # TODO: make more efficient
+        for link in parsed:
+            link["gpa"] = gpa
+        return parsed
+    elif words[i] == 'either':
+        # Go through and add everything up until you hit "or", then add the last one
+        i += 1
+        sub_words = []
+
+        # TODO: Everything after this should be an OR link
+        or_links = []
+
+        while True:
+            sub_words.append(words[i])
+            if words[i + 1] == "or":
+                if words[i][-1] == ",":
+                    # Take off last comma
+                    sub_words[-1] = sub_words[-1][:-1]
+                # This is a complete pre requisite
+                or_links.extend(parse_links_from_pre_req(target, sub_words))
+                i += 2
+                sub_words.clear()
+                sub_words.extend(words[i:])
+                or_links.extend(parse_links_from_pre_req(target, sub_words))
+                break
+            if words[i][-1] == ",":
+                # Take off last comma
+                sub_words[-1] = sub_words[-1][:-1]
+                # This is a complete pre requisite
+                or_links.extend(parse_links_from_pre_req(target, sub_words))
+                sub_words.clear()
+            i += 1
+        return or_links
+    elif words[i].isupper():
+        # Keep traversing until we hit the course code
+        try:
+            dept_val = words[i]
+            i += 1
+            while not is_number(words[i][0]):
+                dept_val += " " + words[i]
+                i += 1
+            num_val = int(re.findall(r'\d+', words[i])[0])
+
+            if dept_val == "CSE":
+                if num_val in nodes:
+                    singleton = { "source" : num_val, "target" : target }
+                    return [singleton]
+                else:
+                    pass
+            else:
+                pass
+        except IndexError:
+            pass
+
+    # Default
+    # TODO: Return None or empty list?
+    return [] # PreRequisite(" ".join(words))
+
 
 # ALGORITHM 2
 # 0. Setup
 nodes = {}
+links = []
 
-# 1. Use the alternate parser. First run, simply construct the nodes map, which maps from class code
-# to a map of all the details
-f = open('cse.html')
-s = f.read()
 
-parser = CSEHTMLParser2()
-parser.feed(s)
+def alg_2():
+    # 1. Use the alternate parser. First run, simply construct the nodes map, which maps from class code
+    # to a map of all the details
+    f = open('cse.html')
+    s = f.read()
+
+    parser = CSEHTMLParser2()
+    parser.feed(s)
+
+    print(nodes)
+
+    # 2. Then, go through each of the prerequisites and set up the links list, with source and target attributes
+    # that correspond to course numbers
+    for code in sorted(nodes):
+        node = nodes[code]
+        try:
+            desc = node["description"]
+            prs = get_pre_reqs_from_description(desc)
+
+            for pr in prs:
+                links.extend(parse_links_from_pre_req(code, pr.split(" ")))
+        except KeyError:
+            # If the node doesn't have a description
+            pass
+
+    print(links)
+
+
+alg_2()

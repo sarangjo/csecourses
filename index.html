@@ -10,15 +10,18 @@
     </head>
     <body>
         <script type="text/javascript">
-            var w = 720;//2400;
-            var h = 480;
-
             // How many levels of classes we're considering
-            var LEVELS = 3;
+            var LEVELS = 4;
             var NODE_SIZE = 20;
 
             // Whether nodes are fixed or not
             var fixed = false;
+
+            var w = 1200, h = 1200;
+            if (fixed) {
+                w = 2400;
+                h = 480;
+            }
 
             var link, node, text;
 
