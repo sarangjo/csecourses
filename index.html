@@ -11,7 +11,7 @@
     <body>
         <script type="text/javascript">
             // How many levels of classes we're considering
-            var LEVELS = 4;
+            var LEVELS = 5;
             var NODE_SIZE = 20;
 
             // Whether nodes are fixed or not
@@ -25,7 +25,7 @@
 
             var link, node, text;
 
-            var filenames = ["csecourses/testcourses"+ LEVELS + ".json", "csecourses/testlinks"+ LEVELS + ".json"];
+            var filenames = ["csecourses/testcourses"+ LEVELS + "-alt.json", "csecourses/testlinks"+ LEVELS + "-alt.json"];
 
             loadFiles(filenames);
 
@@ -50,23 +50,31 @@
                 var links = results[1];
 
                 // Sort by course number
-                nodes.sort(function(a, b) {
+                /*nodes.sort(function(a, b) {
                     return a.number - b.number;
-                });
+                });*/
 
                 if (fixed) {
                     setupNodes(nodes);
                 }
 
+                // Actually attaching links to the nodes
+                links.forEach(function(link) {
+                    link.source = nodes[link.source];
+                    link.target = nodes[link.target];
+                });
+
+                console.log(links);
+
                 // Main part of force layout
                 var force = d3.layout.force()
                     .size([w, h])
-                    .nodes(nodes)
+                    .nodes(d3.values(nodes))
                     .links(links);
 
                 if (!fixed) {
                     // Allows for movement of the nodes
-                    force.linkDistance(90)
+                    force.linkDistance(190)
                         .charge(-300)
                         .on("tick", tick)
                         .start();
