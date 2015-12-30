@@ -1,0 +1,591 @@
+{
+    "512": {
+        "name": "Data Visualization (4)",
+        "number": 512,
+        "description": "Covers techniques and algorithms for creating effective visualizations based on principles from graphic design, visual art, perceptual psychology, and cognitive science. Topics include data and image models; visual encoding; graphical perception; color; animation; interaction techniques; graph layout; and automated design. Lectures, reading, and project."
+    },
+    "515": {
+        "name": "Statistical Methods in Computer Science (4)",
+        "number": 515,
+        "description": "Introduction to the probabilistic and statistical techniques used in modern computer systems. Graphical models, probabilistic inference, statistical learning, sequential models, decision theory. Prerequisite: either CSE 312,STAT 341, STAT 391 or equivalent."
+    },
+    "517": {
+        "name": "Natural Language Processing (4)",
+        "number": 517,
+        "description": "Overview of modern approaches for natural language processing. Topics include language models, text, classification, tagging, parsing, machine translation, semantic, and discourse analysis."
+    },
+    "519": {
+        "name": "Current Research in Computer Science (1, max. 18)",
+        "number": 519,
+        "description": "Weekly presentations on current research activities by members of the department. Only computer science graduate students may register, although others are encouraged to attend. Credit/no-credit only."
+    },
+    "520": {
+        "name": "Computer Science Colloquium (1, max. 18)",
+        "number": 520,
+        "description": "Weekly public presentations on topics of current interest by visiting computer scientists. Credit/no-credit only."
+    },
+    "521": {
+        "name": "Design and Analysis of Algorithms I (4)",
+        "number": 521,
+        "description": "Principles of design of efficient algorithms: recursion, divide and conquer, balancing, dynamic programming, greedy method, network flow, linear programming. Correctness and analysis of algorithms. NP-completeness. Prerequisite: either CSE 332 or equivalent."
+    },
+    "522": {
+        "name": "Design and Analysis of Algorithms II (4)",
+        "number": 522,
+        "description": "Analysis of algorithms more sophisticated than those treated in CSE 521. Content varies and may include such topics as algebraic algorithms, combinational algorithms, techniques for proving lower bounds on complexity, and algorithms for special computing devices such as networks or formulas. Prerequisite: CSE 521."
+    },
+    "523": {
+        "name": "Computational Geometry (4)",
+        "number": 523,
+        "description": "Algorithms for discrete computational geometry. Geometric computation, range searching, convex hulls, proximity, Vornoi diagrams, intersection. Application areas include VLSI design and computer graphics. Prerequisite: CSE 521."
+    },
+    "524": {
+        "name": "Parallel Algorithms (4)",
+        "number": 524,
+        "description": "Design and analysis of parallel algorithms: fundamental parallel algorithms for sorting, arithmetic, matrix and graph problems, and additional selected topics. Emphasis on general techniques and approaches used for developing fast and efficient parallel algorithms and on limitations to their efficacy. Prerequisite: CSE 521."
+    },
+    "525": {
+        "name": "Randomized Algorithms and Probabilistic Analysis (4)",
+        "number": 525,
+        "description": "Examines algorithmic techniques: random selection, random sampling, backwards analysis, algebraic methods, Monte Carlo methods, and randomized rounding; random graphs; the probabilistic method; Markov chains and random walks; and analysis tools: random variables, moments and deviations, Chernoff bounds, martingales, and balls in bins. Prerequisite: either CSE 521 or equivalent."
+    },
+    "527": {
+        "name": "Computational Biology (4)",
+        "number": 527,
+        "description": "Introduces computational methods for understanding biological systems at the molecular level. Problem areas such as mapping and sequencing, sequence analysis, structure prediction, phylogenic inference, regulatory analysis. Techniques such as dynamic programming, Markov models, expectation-maximization, local search."
+    },
+    "528": {
+        "name": "Computational Neuroscience (3)",
+        "number": 528,
+        "description": "Introduction to computational methods for understanding nervous systems and the principles governing their operation. Topics include representation of information by spiking neurons, information processing in neural circuits, and algorithms for adaptation and learning. Prerequisite: elementary calculus, linear algebra, and statistics, or permission of instructor. Offered: jointly with NEURO 528."
+    },
+    "529": {
+        "name": "Neural Control of Movement: A Computational Perspective (3)",
+        "number": 529,
+        "description": "Systematic overview of sensorimotor function on multiple levels of analysis, with emphasis on the phenomenology amenable to computational modeling. Topics include musculoskeletal mechanics, neural networks, optimal control and Bayesian inference, learning and adaptation, internal models, and neural coding and decoding. Prerequisite: vector calculus, linear algebra, MATLAB, or permission of instructor. Offered: jointly with AMATH 533."
+    },
+    "531": {
+        "name": "Computational Complexity I (4)",
+        "number": 531,
+        "description": "Deterministic and nondeterministic time and space complexity, complexity classes, and complete problems. Time and space hierarchies. Alternation and the polynomial-time hierarchy. Circuit complexity. Probabilistic computation. Exponential complexity lower bounds. Interactive proofs. Prerequisite: either CSE 311 or equivalent."
+    },
+    "532": {
+        "name": "Computational Complexity II (4)",
+        "number": 532,
+        "description": "Advanced computational complexity including several of the following: circuit complexity lower bounds, #p and counting classes, probabilistically-checkable proofs, de-randomization, logical characteristics of complexity, communication complexity, time-space tradeoffs, complexity of data structures."
+    },
+    "533": {
+        "name": "Advanced Topics in Complexity Theory (4)",
+        "number": 533,
+        "description": "An in-depth study of advanced topics in computational complexity."
+    },
+    "544": {
+        "name": "Principles of Database Systems (4)",
+        "number": 544,
+        "description": "Data models and query languages (SQL, datalog, OQL). Relational databases, enforcement of integrity constraints. Object-oriented databases and object-relational databases. Principles of data storage and indexing. Query-execution methods and query optimization algorithms. Static analysis of queries and rewriting of queries using views. Data integration. Data mining. Principles of transaction processing."
+    },
+    "546": {
+        "name": "Machine Learning (4)",
+        "number": 546,
+        "description": "Explores methods for designing systems that learn from data and improve with experience. Supervised learning and predictive modeling; decision trees, rule induction, nearest neighbors, Bayesian methods, neural networks, support vector machines, and model ensembles. Unsupervised learning and clustering. Prerequisite: either CSE 312, STAT 341, STAT 391 or equivalent."
+    },
+    "547": {
+        "name": "Machine Learning for Big Data (4)",
+        "number": 547,
+        "description": "Covers machine learning and statistical techniques for analyzing datasets of massive size and dimensionality. Representations include regularized linear models, graphical models, matrix factorization, sparsity, clustering, and latent factor models. Algorithms include sketching, random projections, hashing, fast nearest-neighbors, large-scale online learning, and parallel learning (Map-Reduce, GraphLab). Prerequisite: either STAT 535 or CSE 546. Offered: jointly with STAT 548; W."
+    },
+    "548": {
+        "name": "Computer Systems Architecture (4)",
+        "number": 548,
+        "description": "Notations for computer systems. Processor design (single chip, look-ahead, pipelined, data flow). Memory hierarchy organization and management (virtual memory and caches). Microprogramming. I/O processing. Multiprocessors (SIMD and MIMD). Prerequisite: CSE 451."
+    },
+    "549": {
+        "name": "High-Performance Computer Architectures (4)",
+        "number": 549,
+        "description": "Algorithm design, software techniques, computer organizations for high-performance computing systems. Selected topics from: VLSI complexity for parallel algorithms, compiling techniques for parallel and vector machines, large MIMD machines, interconnection networks, reconfigurable systems, memory hierarchies in multiprocessors, algorithmically specialized processors, data flow architectures. Prerequisite: CSE 548 or permission of instructor."
+    },
+    "550": {
+        "name": "Computer Systems (4)",
+        "number": 550,
+        "description": "Explores computer system design, implementation, and evaluation. Covers principles, techniques, and examples related to the construction of computer systems, including concepts that span network systems, operating systems, web servers, parallel computing, and databases. Prerequisite: CSE 451."
+    },
+    "551": {
+        "name": "Operating Systems (4)",
+        "number": 551,
+        "description": "Operating system design and construction techniques. Concurrent programming, operating system kernels, correctness, deadlock, protection, transaction processing, design methodologies, comparative structure of different kinds of operating systems, and other topics. Prerequisite: CSE 451."
+    },
+    "552": {
+        "name": "Distributed and Parallel Systems (4)",
+        "number": 552,
+        "description": "Principles, techniques, and examples related to the design, implementation, and analysis of distributed and parallel computer systems. Prerequisite: CSE 551."
+    },
+    "553": {
+        "name": "Real-Time Systems (4)",
+        "number": 553,
+        "description": "Design and construction of software for real-time computer systems. Software architectures. Requirements and specification methods. Scheduling algorithms and timing analysis. Real-time operating systems. Real-time programming languages. Selected case studies. Prerequisite: CSE 451."
+    },
+    "557": {
+        "name": "Computer Graphics (4)",
+        "number": 557,
+        "description": "Introduction to image synthesis and computer modeling, emphasizing the underlying theory required for undertaking computer graphics research. Topics include color theory, image processing, affine and projective geometry, hidden-surface determination, photorealistic image synthesis, advanced curve and surface design, dynamics, realistic character animation. Prerequisite: solid knowledge of linear algebra."
+    },
+    "558": {
+        "name": "Special Topics in Computer Graphics (4)",
+        "number": 558,
+        "description": "Advanced topics in computer graphics not treated in CSE 557. Topics vary from year to year but typically include advanced aspects of image synthesis, animation, and 3D photography. Prerequisite: CSE 557 or permission of instructor."
+    },
+    "561": {
+        "name": "Computer Communication and Networks (4)",
+        "number": 561,
+        "description": "Fundamentals of data transmission: coding, message formats, and protocols. Organization of computer networks. Examples of network implementations. Prerequisite: either CSE 451 or equivalent."
+    },
+    "564": {
+        "name": "Computer Security and Privacy (4)",
+        "number": 564,
+        "description": "Examines the fundamentals of computer security including: human factors; attack detection, measurements, and models; cryptography and communications security; system design and implementation; and side channels."
+    },
+    "311": {
+        "name": "Foundations of Computing I (4) QSR",
+        "number": 311,
+        "description": "Examines fundamentals of logic, set theory, induction, and algebraic structures with applications to computing; finite state machines; and limits of computability. Prerequisite: CSE 143; either MATH 126 or MATH 136."
+    },
+    "312": {
+        "name": "Foundations of Computing II (4) QSR",
+        "number": 312,
+        "description": "Examines fundamentals of enumeration and discrete probability; applications of randomness to computing; polynomial-time versus NP; and NP-completeness. Prerequisite: CSE 311; CSE 332, which may be taken concurrently."
+    },
+    "571": {
+        "name": "AI-based Mobile Robotics (4)",
+        "number": 571,
+        "description": "Overview of mobile robot control and sensing. Behavior-based control, world modeling, localization, navigation, and planning Probabilistic sensor interpretation, Bayers filters, particle filters. Projects: Program real robots to perform navigation tasks. Prerequisite: either CSE 473 or permission of instructor."
+    },
+    "573": {
+        "name": "Artificial Intelligence I (4)",
+        "number": 573,
+        "description": "Intensive introduction to artificial intelligence: Problem solving and search, game playing, knowledge representation and reasoning, uncertainty, machine learning, natural language processing. Prerequisite: either CSE 421 or equivalent; exposure to logic, probability, and statistics."
+    },
+    "574": {
+        "name": "Artificial Intelligence II (4)",
+        "number": 574,
+        "description": "Advanced topics in artificial intelligence. Subjects include planning, natural language understanding, qualitative physics, machine learning, and formal models of time and action. Students are required to do projects. Prerequisite: CSE 573."
+    },
+    "576": {
+        "name": "Computer Vision (3)",
+        "number": 576,
+        "description": "Principles and methods for interpreting the three-dimensional world from images. Topics include feature detection, image segmentation, motion estimation, image mosaics, 3D-shape reconstruction, object recognition, and image retrieval. Prerequisite: solid knowledge of linear algebra; good programming skills. Offered: jointly with E E 576."
+    },
+    "577": {
+        "name": "Special Topics in Computer Vision (3)",
+        "number": 577,
+        "description": "Topics vary and may include vision for graphics, probabilistic vision and learning, medical imaging, content-based image and video retrieval, robot vision, or 3D object recognition. Prerequisite: CSE 576/E E 576. Offered: jointly with E E 577."
+    },
+    "579": {
+        "name": "Intelligent Control through Learning and Optimization (3)",
+        "number": 579,
+        "description": "Design or near-optimal controllers for complex dynamical systems, using analytical techniques, machine learning, and optimization. Topics from deterministic and stochastic optimal control, reinforcement learning and dynamic programming, numerical optimization in the context of control, and robotics. Prerequisite: vector calculus; linear algebra; MATLAB. Offered: jointly with AMATH 579."
+    },
+    "586": {
+        "name": "Introduction to Synthetic Biology (3)",
+        "number": 586,
+        "description": "Studies mathematical modeling of transcription, translation, regulation, and metabolism in cell; computer aided design methods for synthetic biology; implementation of information processing, Boolean logic and feedback control laws with genetic regulatory networks; modularity, impedance matching and isolation in biochemical circuits; and parameter estimation methods. Prerequisite: either MATH 136 or MATH 307, AMATH 351, or CSE 311 and MATH 308 or AMATH 352. Offered: jointly with BIOEN 523/E E 523."
+    },
+    "331": {
+        "name": "Software Design and Implementation (4)",
+        "number": 331,
+        "description": "Explores concepts and techniques for design and construction of reliable and maintainable software systems in modern high-level languages; program structure and design; program-correctness approaches, including testing; and event-driven programming (e.g., graphical user interface). Includes substantial project and software-team experience. Prerequisite: CSE 143."
+    },
+    "332": {
+        "name": "Data Abstractions (4)",
+        "number": 332,
+        "description": "Covers abstract data types and structures including dictionaries, balanced trees, hash tables, priority queues, and graphs; sorting; asymptotic analysis; fundamental graph algorithms including graph search, shortest path, and minimum spanning trees; concurrency and synchronization; and parallelism. Not available for credit for students who have completed CSE 373. Prerequisite: CSE 311."
+    },
+    "333": {
+        "name": "Systems Programming (4)",
+        "number": 333,
+        "description": "Includes substantial programming experience in languages that expose machine characteristics and low-level data representation (e.g., C and C++); explicit memory management; interacting with operating-system services; and cache-aware programming. Prerequisite: CSE 351."
+    },
+    "590": {
+        "name": "Research Seminar (*, max. 50)",
+        "number": 590,
+        "description": "Several offerings each quarter, on topics of current interest."
+    },
+    "591": {
+        "name": "Group Projects in Computer Science (1-3, max. 25)",
+        "number": 591,
+        "description": "Focuses on specialized topics and research activities in computer science."
+    },
+    "568": {
+        "name": "Introduction to VLSI Systems (4)",
+        "number": 568,
+        "description": "Introduction to CMOS technology and circuit design; combinational logic-design alternatives; register-design and system-clocking methodologies; datapath and subsystem design; VLSI system-design methodologies; CAD tools for synthesis, layout, simulation, and validation; design of a complex VLSI chip. Prerequisite: either CSE 567 or permission of instructor."
+    },
+    "341": {
+        "name": "Programming Languages (4)",
+        "number": 341,
+        "description": "Basic concepts of programming languages, including abstraction mechanisms, types, and scoping. Detailed study of several different programming paradigms, such as functional, object-oriented, and logic programming. No credit if CSE 413 has been taken. Prerequisite: CSE 143."
+    },
+    "599": {
+        "name": "Special Topics in Computer Science (1-5, max. 30)",
+        "number": 599,
+        "description": "Studies of emerging areas and specialized topics in computer science."
+    },
+    "344": {
+        "name": "Introduction to Data Management (4)",
+        "number": 344,
+        "description": "Introduces database management systems and writing applications that use such systems; data models (e.g., relational, semi-structured), query languages (e.g., SQL, XQuery), language bindings, conceptual modeling, transactions, security, database tuning, data warehousing, parallelism, and web-data management. Prerequisite: CSE 311."
+    },
+    "413": {
+        "name": "Programming Languages and Their Implementation (3)",
+        "number": 413,
+        "description": "Basic concepts and implementation strategies for modern functional and object-oriented programming languages such as Scheme and Java. Intended for non-majors. No credit to students who have completed CSE 341 or CSE 401. Prerequisite: CSE 373."
+    },
+    "399": {
+        "name": "CSE Foreign Study (*)",
+        "number": 399,
+        "description": "Upper-division computer science or computer engineering course, taken through an approved study abroad program, for which there is no direct University of Washington equivalent. Credit/no-credit only."
+    },
+    "351": {
+        "name": "The Hardware/Software Interface (4)",
+        "number": 351,
+        "description": "Examines key computational abstraction levels below modern high-level languages; number representation, assembly language, introduction to C, memory management, the operating-system process model, high-level machine architecture including the memory hierarchy, and how high-level languages are implemented. Prerequisite: CSE 143."
+    },
+    "352": {
+        "name": "Hardware Design and Implementation (4)",
+        "number": 352,
+        "description": "Covers digital circuit design, processor design, and systems integration and embedded-systems issues. Includes substantial hardware laboratory. Prerequisite: CSE 311; CSE 351."
+    },
+    "600": {
+        "name": "Independent Study or Research (*-)",
+        "number": 600,
+        "description": "Credit/no-credit only."
+    },
+    "700": {
+        "name": "Master's Thesis (*-)",
+        "number": 700,
+        "description": "Credit/no-credit only."
+    },
+    "369": {
+        "name": "Introduction to Digital Design (2)",
+        "number": 369,
+        "description": "Introduces the implementation of digital logic and its specification and simulation. Covers Boolean algebra; combinational circuits including arithmetic circuits and regular structures; sequential circuits including finitestate-machines; and use of field-programmable gate arrays (FPGAs). Emphasizes simulation, high-level specification, and automatic synthesis techniques. Prerequisite: CSE 311."
+    },
+    "371": {
+        "name": "Design of Digital Circuits and Systems (5)",
+        "number": 371,
+        "description": "Provides a theoretical background in, and practical experience with, tools, and techniques for modeling complex digital systems with the Verilog hardware description language, maintaining signal integrity, managing power consumption, and ensuring robust intra- and inter-system communication. Prerequisite: either E E 205 or E E 215; either E E 271 or CSE 369. Offered: jointly with E E 371."
+    },
+    "190": {
+        "name": "Current Topics in Computer Science and Engineering (1-5, max. 15)",
+        "number": 190
+    },
+    "374": {
+        "name": "Intermediate Programming Concepts and Tools (3)",
+        "number": 374,
+        "description": "Covers key software development concepts and tools not in introductory courses. Concepts of lower-level programming (C/C++) and explicit memory management; techniques and tools for individual and group software development; design, implementation, and testing strategies. Intended for non-majors. Cannot be taken for credit if credit received for CSE 333. Prerequisite: CSE 143."
+    },
+    "120": {
+        "name": "Computer Science Principles (5) NW, QSR",
+        "number": 120,
+        "description": "Introduces fundamental concepts of computer science and computational thinking. Includes logical reasoning, problem solving, data representation, abstraction, the creation of digital artifacts such as web pages and programs, managing complexity, operation of computers and networks, effective web searching, ethical, legal and social aspects of information technology. May not be taken for credit if credit earned in CSE 100/INFO 100."
+    },
+    "131": {
+        "name": "Science and Art of Digital Photography (4) VLPA",
+        "number": 131,
+        "description": "Covers the fundamentals of digital photography, including computational imaging; the elements of photographic composition and design; and the future of internet-enabled photography."
+    },
+    "390": {
+        "name": "Special Topics in Computer Science and Engineering (1-5, max. 10)",
+        "number": 390,
+        "description": "Covers topics of current interest in computer science and engineering."
+    },
+    "567": {
+        "name": "Principles of Digital Systems Design (4)",
+        "number": 567,
+        "description": "Principles of logic design, combinational and sequential circuits, minimization techniques, structured design methods, CMOS technology, complementary and ratioed gates, delay estimation and performance analysis, arithmetic circuits, memories, clocking methodologies, synthesis and simulation tools, VLSI processor architecture. Prerequisite: basic knowledge of logic design."
+    },
+    "142": {
+        "name": "Computer Programming I (4) NW, QSR",
+        "number": 142,
+        "description": "Basic programming-in-the-small abilities and concepts including procedural programming (methods, parameters, return, values), basic control structures (sequence, if/else, for loop, while loop), file processing, arrays, and an introduction to defining objects. Intended for students without prior programming experience. Offered: AWSpS."
+    },
+    "143": {
+        "name": "Computer Programming II (5) NW, QSR",
+        "number": 143,
+        "description": "Continuation of CSE 142. Concepts of data abstraction and encapsulation including stacks, queues, linked lists, binary trees, recursion, instruction to complexity and use of predefined collection classes. Prerequisite: CSE 142. Offered: AWSpS."
+    },
+    "401": {
+        "name": "Introduction to Compiler Construction (4)",
+        "number": 401,
+        "description": "Fundamentals of compilers and interpreters; symbol tables; lexical analysis, syntax analysis, semantic analysis, code generation, and optimizations for general purpose programming languages. No credit to students who have taken CSE 413. Prerequisite: CSE 332; CSE 351."
+    },
+    "403": {
+        "name": "Software Engineering (4)",
+        "number": 403,
+        "description": "Fundamentals of software engineering using a group project as the basic vehicle. Topics covered include the software crisis, managing complexity, requirements specification, architectural and detailed design, testing and analysis, software process, and tools and environments. Prerequisite: CSE 331; CSE 332."
+    },
+    "154": {
+        "name": "Web Programming (5) QSR",
+        "number": 154,
+        "description": "Covers languages, tools, and techniques for developing interactive and dynamic web pages. Topics include page styling, design, and layout; client and server side scripting; web security; and interacting with data sources such as databases. Prerequisite: minimum grade of 2.0 in either CSE 142, CSE 143, or CSE 160."
+    },
+    "410": {
+        "name": "Computer Systems (3)",
+        "number": 410,
+        "description": "Structure and components of hardware and software systems. Machine organization, including central processor and input-output architectures; assembly language programming; operating systems, including process, storage, and file management. Intended for non-majors. No credit to students who have completed CSE 351 or CSE 451. Prerequisite: CSE 373."
+    },
+    "414": {
+        "name": "Introduction to Database Systems (4)",
+        "number": 414,
+        "description": "Introduces database management systems and writing applications that use such systems; data models, query languages, transactions, database tuning, data warehousing, and parallelism. Intended for non-majors. Not open for credit to students who have completed CSE 344. Prerequisite: minimum grade of 2.5 in CSE 143."
+    },
+    "415": {
+        "name": "Introduction to Artificial Intelligence (3) NW",
+        "number": 415,
+        "description": "Principles and programming techniques of artificial intelligence: LISP, symbol manipulation, knowledge representation, logical and probabilistic reasoning, learning, language understanding, vision, expert systems, and social issues. Intended for non-majors. Not open for credit to students who have completed CSE 473. Prerequisite: CSE 373."
+    },
+    "160": {
+        "name": "Data Programming (4) NW, QSR",
+        "number": 160,
+        "description": "Introduction to computer programming. Assignments solve real data manipulation tasks from science, engineering, business, and the humanities. Concepts of computational thinking, problem-solving, data analysis, Python programming, control and data abstraction, file processing, and data visualization. Intended for students without prior programming experience. No credit if CSE 143 has been taken."
+    },
+    "417": {
+        "name": "Algorithms and Computational Complexity (3)",
+        "number": 417,
+        "description": "Design and analysis of algorithms and data structures. Efficient algorithms for manipulating graphs and strings. Fast Fourier Transform. Models of computation, including Turing machines. Time and space complexity. NP-complete problems and undecidable problems. Intended for non-majors. Prerequisite: CSE 373."
+    },
+    "421": {
+        "name": "Introduction to Algorithms (3)",
+        "number": 421,
+        "description": "Techniques for design of efficient algorithms. Methods for showing lower bounds on computational complexity. Particular algorithms for sorting, searching, set manipulation, arithmetic, graph problems, pattern matching. Prerequisite: CSE 312; CSE 332."
+    },
+    "427": {
+        "name": "Computational Biology (3)",
+        "number": 427,
+        "description": "Algorithmic and analytic techniques underlying analysis of large-scale biological data sets such as DNA, RNA, and protein sequences or structures, expression and proteomic profiling. Hands-on experience with databases, analysis tools, and genome markers. Applications such as sequence alignment, BLAST, phylogenetics, and Markov models. Prerequisite: CSE 312; CSE 332."
+    },
+    "428": {
+        "name": "Computational Biology Capstone (5)",
+        "number": 428,
+        "description": "Designs and implements a software tool or software analysis for an important problem in computational molecular biology. Prerequisite: CSE 312; CSE 331; CSE 332."
+    },
+    "431": {
+        "name": "Introduction to Theory of Computation (3)",
+        "number": 431,
+        "description": "Models of computation, computable and noncomputable functions, space and time complexity, tractable and intractable functions. Prerequisite: CSE 312."
+    },
+    "440": {
+        "name": "Introduction to HCI: User Interface Design, Prototyping, and Evaluation (5)",
+        "number": 440,
+        "description": "Human-Computer Interaction (HCI) theory and techniques. Methods for designing, prototyping, and evaluating user interfaces to computing applications. Human capabilities, interface technology, interface design methods, and interface evaluation tools and techniques. Prerequisite: CSE 332."
+    },
+    "441": {
+        "name": "Advanced HCI: Advanced User Interface Design, Prototyping, and Evaluation (5)",
+        "number": 441,
+        "description": "Human-Computer Interaction (HCI) theory and techniques. Advanced methods for designing, prototyping, and evaluating user interfaces to computing applications. Novel interface technology, advanced interface design methods, and prototyping tools. Prerequisite: CSE 440."
+    },
+    "444": {
+        "name": "Database Systems Internals (4)",
+        "number": 444,
+        "description": "The relational data model and the SQL query language. Conceptual modeling: entity/relationships, normal forms. XML, XPath, and XQuery. Transactions: recovery and concurrency control. Implementation of a database system. A medium sized project using a rational database backend. Prerequisite: CSE 332; CSE 344."
+    },
+    "446": {
+        "name": "Machine Learning (4)",
+        "number": 446,
+        "description": "Methods for designing systems that learn from data and improve with experience. Supervised learning and predictive modeling: decision trees, rule induction, nearest neighbors, Bayesian methods, neural networks, support vector machines, and model ensembles. Unsupervised learning and clustering. Prerequisite: CSE 332; either STAT 390, STAT 391, or CSE 312."
+    },
+    "373": {
+        "name": "Data Structures and Algorithms (3)",
+        "number": 373,
+        "description": "Fundamental algorithms and data structures for implementation. Techniques for solving problems by programming. Linked lists, stacks, queues, directed graphs. Trees: representations, traversals. Searching (hashing, binary search trees, multiway trees). Garbage collection, memory management. Internal and external sorting. Intended for non-majors. Not open for credit to students who have completed CSE 332. Prerequisite: CSE 143."
+    },
+    "800": {
+        "name": "Doctoral Dissertation (*-)",
+        "number": 800,
+        "description": "Credit/no-credit only."
+    },
+    "450": {
+        "name": "Animation Production Seminar (1)",
+        "number": 450,
+        "description": "Open to all students who have an interest in digital animation. Reviews and analyzes films, animated feature films, and television commercials. Emphasizes the technical and aesthetic basics of animation production in industry studio environments."
+    },
+    "451": {
+        "name": "Introduction to Operating Systems (4)",
+        "number": 451,
+        "description": "Principles of operating systems. Process management, memory management, auxiliary storage management, resource allocation. No credit to students who have completed CSE 410 or E E 474. Prerequisite: CSE 351; CSE 332; CSE 333."
+    },
+    "452": {
+        "name": "Introduction to Distributed Systems (4)",
+        "number": 452,
+        "description": "Covers abstractions and implementation techniques in the construction of distributed systems, including cloud computing, distributed storage systems, and distributed caches. Prerequisite: CSE 451."
+    },
+    "454": {
+        "name": "Advanced Internet and Web Services (5)",
+        "number": 454,
+        "description": "Design of Internet search engines, including spider architecture, inverted indices, frequency rankings, latent semantic indexing, hyperlink analysis, and refinement interfaces. Construction of scalable and secure web services. Datamining webserver logs to provide personalized and user-targeted services. Large project. Prerequisite: CSE 332; CSE 351; either CSE 331 or CSE 352."
+    },
+    "455": {
+        "name": "Computer Vision (4)",
+        "number": 455,
+        "description": "Introduction to image analysis and interpreting the 3D world from image data. Topics may include segmentation, motion estimation, image mosaics, 3D-shape reconstruction, object recognition, and image retrieval. Prerequisite: CSE 333; CSE 332."
+    },
+    "456": {
+        "name": "Story Design for Computer Animation (4)",
+        "number": 456,
+        "description": "Animation principles and production for story development and design. Design, development, and production of several storyreels, which are a tool for the pre-production of animated features and shorts. Student use authoring tools to present finished work."
+    },
+    "457": {
+        "name": "Computer Graphics (4)",
+        "number": 457,
+        "description": "Introduction to computer image synthesis, modeling, and animation. Topics may include visual perception, displays and framebuffers, image processing, affine and projective transformations, hierarchical modeling, hidden surface elimination, shading, ray-tracing, anti-aliasing, texture mapping, curves, surfaces, particle systems, dynamics, character animation, and animation principles. Prerequisite: CSE 333; CSE 332."
+    },
+    "458": {
+        "name": "Computer Animation (5)",
+        "number": 458,
+        "description": "Introduction to basic principles of computer generated animation. Focus on the modeling and lighting of animated characters. Students from art, CSE, and music team up on projects to be built on commercially-available modeling and lighting packages. Prerequisite: CSE 457."
+    },
+    "459": {
+        "name": "Pre-Production for Collaborative Animation (5)",
+        "number": 459,
+        "description": "Pre-production of collaboratively designed animated shorts. In-depth analysis of classical and computer generated works. Character design and pre-planning, model sheets, character rigging, storyreel and animatics, character motion, design for multiple characters, and principles of animation as applied to character motion and effects. Prerequisite: CSE 458."
+    },
+    "460": {
+        "name": "Animation Capstone (5)",
+        "number": 460,
+        "description": "Apply the knowledge gained in previous animation courses to produce a short animated film. Topics include scene planning, digital cinematography, creature and hard surface modeling, animatics and basics of character animation, and rendering techniques. Prerequisite: CSE 458, CSE 459."
+    },
+    "461": {
+        "name": "Introduction to Computer-Communication Networks (4)",
+        "number": 461,
+        "description": "Computer network architectures, protocol layers, network programming. Transmission media, encoding systems, switching, multiple access arbitration. Network routing, congestion control, flow control. Transport protocols, real-time, multicast, network security. Prerequisite: either CSE 326 or CSE 332; either CSE 303 or CSE 333."
+    },
+    "464": {
+        "name": "Advanced Topics in Digital Animation (1-5, max. 10)",
+        "number": 464,
+        "description": "Students design individual animated works for professional quality demo reels. 2- and 3-D animatics, special effects design, advanced character animation techniques, 3-D paint techniques and integration, short design, sequence planning, non-photorealistic rendering options, interactive animation for pre-planning, and advanced production techniques and strategies."
+    },
+    "467": {
+        "name": "Advanced Digital Design (4)",
+        "number": 467,
+        "description": "Advanced techniques in the design of digital systems. Hardware description languages, combinational and sequential logic synthesis and optimization methods, partitioning, mapping to regular structures. Emphasis on reconfigurable logic as an implementation medium. Memory system design. Digital communication including serial/parallel and synchronous/asynchronous methods. Prerequisite: CSE 352; CSE 332."
+    },
+    "469": {
+        "name": "Computer Architecture I (5)",
+        "number": 469,
+        "description": "Introduction to computer architecture. Assembly and machine language, microprocessor organization including control and datapath. Computer arithmetic. Memory systems and caching. Performance modeling of microprocessors. Prerequisite: either E E 271 or CSE 369; CSE 143. Offered: jointly with E E 469; AWSp."
+    },
+    "470": {
+        "name": "Computer Architecture II (4)",
+        "number": 470,
+        "description": "Advanced computer architecture. Performance evaluation and energy efficiency. Instruction set architectures. Instruction-level parallelism. Modern microprocessor micro-architecture. Thread-level parallelism. Cache coherency and memory consistency in shared-memory multiprocessors. Memory hierarchy. GPU architecture. Warehouse-scale computing. Trends in computer design. Prerequisite: CSE 351; either CSE 469 or E E 469. Offered: jointly with E E 470."
+    },
+    "472": {
+        "name": "Introduction to Computational Linguistics (5) VLPA/NW",
+        "number": 472,
+        "description": "Introduction to computational approaches to modeling language, for linguistic research and practical applications, including analyses at different levels of linguistic structure and symbolic as well as statistical approaches. Prerequisite: either LING 200 or LING 400; either LING 461 or CSE 311. Offered: jointly with LING 472."
+    },
+    "473": {
+        "name": "Introduction to Artificial Intelligence (3)",
+        "number": 473,
+        "description": "Principal ideas and developments in artificial intelligence: Problem solving and search, game playing, knowledge representation and reasoning, uncertainty, machine learning, natural language processing. Not open for credit to students who have completed CSE 415. Prerequisite: CSE 332."
+    },
+    "474": {
+        "name": "Introduction to Embedded Systems (4)",
+        "number": 474,
+        "description": "Introduces the specification, design, development, and test of real time embedded system software. Use of a modern embedded microcomputer or microcontroller as a target environment for a series of laboratory projects and a comprehensive final project. Prerequisite: CSE 143. Offered: jointly with E E 474; AWSpS."
+    },
+    "475": {
+        "name": "Embedded Systems Capstone (5)",
+        "number": 475,
+        "description": "Capstone design experience. Prototype a substantial project mixing hardware, software, and communications. Focuses on embedded processors, programmable logic devices, and emerging platforms for the development of digital systems. Provides a comprehensive experience in specification, design, and management of contemporary embedded systems. Prerequisite: either E E 271 or CSE 369; either CSE 466, E E 472, or CSE 474/E E 474. Offered: jointly with E E 475; AWSp."
+    },
+    "481": {
+        "name": "Capstone Software Design (5, max. 15)",
+        "number": 481,
+        "description": "Students work in teams to design and implement a software project involving multiple areas of the CSE curriculum. Emphasis is placed on the development process itself, rather than on the product. Prerequisite: CSE 332; CSE 351; either CSE 331 or CSE 352."
+    },
+    "587": {
+        "name": "Advanced Systems and Synthetic Biology (3)",
+        "number": 587,
+        "description": "Covers advanced concepts in system and synthetic biology. Includes kinetics, modeling, stoichiometry, control theory, metabolic systems, signaling, and motifs. All topics are set against problems in synthetic biology. Prerequisite: either BIOEN 523, E E 523, or CSE 586. Offered: jointly with BIOEN 524/E E 524; W."
+    },
+    "484": {
+        "name": "Computer Security (4)",
+        "number": 484,
+        "description": "Foundations of modern computer security, including software security, operating system security, network security, applied cryptography, human factors, authentication, anonymity, and web security. Prerequisite: CSE 332; CSE 351."
+    },
+    "486": {
+        "name": "Introduction to Synthetic Biology (3)",
+        "number": 486,
+        "description": "Studies mathematical modeling of transcription, translation, regulation, and metabolism in cell; computer aided design methods for synthetic biology; implementation of information processing, Boolean logic and feedback control laws with genetic regulatory networks; modularity, impedance matching and isolation in biochemical circuits; and parameter estimation methods. Prerequisite: either MATH 136 or MATH 307, AMATH 351, or CSE 311 and MATH 308 or AMATH 352. Offered: jointly with BIOEN 423/E E 423; A."
+    },
+    "487": {
+        "name": "Advanced Systems and Synthetic Biology (3)",
+        "number": 487,
+        "description": "Covers advanced concepts in system and synthetic biology. Includes kinetics, modeling, stoichiometry, control theory, metabolic systems, signaling, and motifs. All topics are set against problems in synthetic biology. Prerequisite: either BIOEN 401, BIOEN 423, E E 423, or CSE 486. Offered: jointly with BIOEN 424/E E 424; W."
+    },
+    "488": {
+        "name": "Laboratory Methods in Synthetic Biology (4)",
+        "number": 488,
+        "description": "Designs and builds transgenic bacterial using promoters and genes taken from a variety of organisms. Uses construction techniques including recombination, gene synthesis, and gene extraction. Evaluates designs using sequencing, fluorescence assays, enzyme activity assays, and single cell studies using time-lapse microscopy. Prerequisite: either BIOEN 423, E E 423, or CSE 486; either CHEM 142, CHEM 144, or CHEM 145. Offered: jointly with BIOEN 425/E E 425; W."
+    },
+    "490": {
+        "name": "Special Topics in Computer Science and Engineering (1-5, max. 15)",
+        "number": 490,
+        "description": "Lectures, discussions, and possibly labs on topics of current interest in computer science and engineering not covered by other CSE undergraduate courses."
+    },
+    "495": {
+        "name": "Project Practicum ([1-5]-, max. 5)",
+        "number": 495,
+        "description": "Available in special situations for computer science majors to compete, under instructor guidance, a substantial computing project that deepens one's knowledge and experience in the field. Projects may involve a group of students."
+    },
+    "497": {
+        "name": "Undergraduate Research Seminar (1)",
+        "number": 497,
+        "description": "Students prepare and give a public talk on their faculty-sponsored research projects."
+    },
+    "498": {
+        "name": "Senior Project ([1-9]-, max. 9)",
+        "number": 498,
+        "description": "A report (and perhaps demonstration) describing a development, survey, or small research project in computer science or an application to another field. Objectives: (1) integrating material from several courses, (2) introducing the professional literature, (3) gaining experience in writing a technical document, and (4) showing evidence of independent work. Work normally extends over more than one quarter, for a maximum of 6 credits for CSE 498; 9 credits are required for CSE 498H."
+    },
+    "499": {
+        "name": "Reading and Research (1-24, max. 24)",
+        "number": 499,
+        "description": "Available in special situations for advanced computer science majors to do reading and research in field, subject to approval of undergraduate adviser and CSE faculty member. Free elective, but does not replace core course or computer science elective. Credit/no-credit only."
+    },
+    "501": {
+        "name": "Programming Language Analysis and Implementation (4)",
+        "number": 501,
+        "description": "Design and implementation of compilers and run-time systems for imperative, object-oriented, and functional languages. Intra- and interprocedural analyses and optimizations. Prerequisite: CSE 341."
+    },
+    "503": {
+        "name": "Software Engineering (4)",
+        "number": 503,
+        "description": "Specification, implementation, and testing of large, multiperson, software systems. Topics include abstraction, information hiding, software development environments, and formal specifications."
+    },
+    "504": {
+        "name": "Advanced Topics in Software Engineering (4)",
+        "number": 504,
+        "description": "Topics vary but may include software design and evolution, formal methods, requirements specifications, software and system safety, reverse engineering, real-time software, metrics and measurement, programming environments, and verification and validation."
+    },
+    "505": {
+        "name": "Principles of Programming Languages (4)",
+        "number": 505,
+        "description": "Design and formal semantics of modern programming languages, includes functional and object-oriented languages. Prerequisite: CSE 341."
+    },
+    "506": {
+        "name": "Advanced Topics in Programming Languages (4)",
+        "number": 506,
+        "description": "May include functional, object-oriented, parallel, and logic programming languages; semantics for languages of these kinds; type declaration, inference, and checking (including polymorphic types); implementation issues, such as compilation, lazy evaluation, combinators, parallelism, various optimization techniques. Implementation project required. Prerequisite: CSE 501 which may be taken concurrently, and CSE 505."
+    },
+    "507": {
+        "name": "Computer-Aided Reasoning for Software (4)",
+        "number": 507,
+        "description": "Covers theory, implementation, and applications of automated reasoning techniques, such as satisfiability solving, theorem proving, model checking, and abstract interpretation. Topics include concepts from mathematical logic and applications of automated reasoning to the design, construction, and analysis of software."
+    },
+    "510": {
+        "name": "Advanced Topics in Human-Computer Interaction (4)",
+        "number": 510,
+        "description": "Content varies, including interface issues for networks, embedded systems, education applications, safety and critical systems, graphics and virtual reality, databases, and computer-supported cooperative work."
+    }
+}
