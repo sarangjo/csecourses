@@ -16,10 +16,19 @@ div.bar {
 	stroke-width: 3px;
 }
 
+/* Different types of links */
 .link {
 	fill: none;
 	stroke: #777;
 	stroke-width: 2px;
+}
+.link.gpa {
+	stroke: red;
+}
+
+/* This is for the marker-ends. */
+#gpa {
+  fill: red;
 }
 
 .text {

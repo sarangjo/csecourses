@@ -59,3 +59,5 @@ docs/_build/
 target/
 
 csecourses/.idea/*
+csecourses/.idea/
+csecourses/.idea*

@@ -1,0 +1,81 @@
+[
+    {
+        "target": "143",
+        "source": "142"
+    },
+    {
+        "target": "154",
+        "source": "142",
+        "gpa": 2.0
+    },
+    {
+        "target": "154",
+        "source": "143",
+        "gpa": 2.0
+    },
+    {
+        "target": "154",
+        "source": "160",
+        "gpa": 2.0
+    },
+    {
+        "target": "311",
+        "source": "143"
+    },
+    {
+        "target": "312",
+        "source": "311"
+    },
+    {
+        "target": "312",
+        "source": "332"
+    },
+    {
+        "target": "331",
+        "source": "143"
+    },
+    {
+        "target": "332",
+        "source": "311"
+    },
+    {
+        "target": "333",
+        "source": "351"
+    },
+    {
+        "target": "341",
+        "source": "143"
+    },
+    {
+        "target": "344",
+        "source": "311"
+    },
+    {
+        "target": "351",
+        "source": "143"
+    },
+    {
+        "target": "352",
+        "source": "311"
+    },
+    {
+        "target": "352",
+        "source": "351"
+    },
+    {
+        "target": "369",
+        "source": "311"
+    },
+    {
+        "target": "371",
+        "source": "369"
+    },
+    {
+        "target": "373",
+        "source": "143"
+    },
+    {
+        "target": "374",
+        "source": "143"
+    }
+]

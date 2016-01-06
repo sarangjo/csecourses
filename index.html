@@ -11,19 +11,19 @@
     <body>
         <script type="text/javascript">
             // How many levels of classes we're considering
-            var LEVELS = 5;
+            var LEVELS = 3;
             var NODE_SIZE = 20;
 
             // Whether nodes are fixed or not
             var fixed = false;
 
-            var w = 1200, h = 1200;
-            if (fixed) {
+            var w = 1200, h = 700;
+            if (fixed || LEVELS >= 4) {
                 w = 2400;
                 h = 480;
             }
 
-            var link, node, text;
+            var link, node, text, linkText;
 
             var filenames = ["csecourses/testcourses"+ LEVELS + "-alt.json", "csecourses/testlinks"+ LEVELS + "-alt.json"];
 
@@ -49,22 +49,15 @@
                 var nodes = results[0];
                 var links = results[1];
 
-                // Sort by course number
-                /*nodes.sort(function(a, b) {
-                    return a.number - b.number;
-                });*/
-
                 if (fixed) {
                     setupNodes(nodes);
                 }
 
-                // Actually attaching links to the nodes
+                // Attaching node objects to links
                 links.forEach(function(link) {
                     link.source = nodes[link.source];
                     link.target = nodes[link.target];
                 });
-
-                console.log(links);
 
                 // Main part of force layout
                 var force = d3.layout.force()
@@ -85,8 +78,9 @@
                     .attr("width", w)
                     .attr("height", h);
 
+                // Setting up the link end arrows
                 svg.append("defs").selectAll("marker")
-                        .data(["regular"]).enter()
+                        .data(["regular","gpa"]).enter()
                     .append("marker")
                         .attr("id", function(d) { return d; })
                         // Viewport for the arrow
@@ -102,17 +96,25 @@
                         // Draws the triangle, pointing right. M denotes start, L is each point
                         .attr("d", "M0,-5L10,0L0,5");
 
-                // Attaching nodes and links to the visualization
-                // Link setup
+                ///////// VISUALIZATION /////////
+
+                // Links
                 link = svg.append("g").selectAll(".link")
                     .data(force.links()).enter()
+                    // This is of type <path>, because it might potentially be a curve,
+                    // not just a straight <line>.
                     .append("path")
-                    .attr("class", "link")
+                    // Changes the color of the link if there's a minimum GPA requirement
+                    .attr("class", function(d) {
+                        return "link" + (d.hasOwnProperty('gpa') ? " gpa" : "");
+                    })
                     // Attaches marker (arrow) to the end of the link
                     // As of now the regular link is just called "regular"
-                    .style("marker-end", "url(#regular)");
+                    .style("marker-end", function(d) {
+                        return "url(#" + (d.hasOwnProperty('gpa') ? "gpa" : "regular") + ")";
+                    });
 
-                // Node setup
+                // Nodes
                 node = svg.append("g").selectAll(".node")
                     .data(force.nodes()).enter()
                     .append("circle")
@@ -123,7 +125,7 @@
                     node.call(force.drag);
                 }
 
-                // Text setup
+                // Text
                 text = svg.append("g").selectAll(".text")
                     .data(force.nodes()).enter()
                     .append("text")
@@ -134,6 +136,21 @@
                         .attr("y", ".31em");
                 }
 
+                // Extract out links with GPA values
+                gpaLinks = getGpaLinks(links);
+                
+                // Link GPA Text
+                linkText = svg.append("g").selectAll(".linkText")
+                    .data(gpaLinks).enter()
+                    .append("text")
+                    .attr("dy", ".35em")
+                    .attr("fill", "Black")
+                    .text(function(d) {
+                        // Make sure there's 1 decimal place
+                        return Number(d.gpa).toFixed(1);
+                    });
+
+                // Fixed force graph
                 if(fixed) {
                     force.on('end', function() {
                         node.attr('cx', function(d) { return d.x; })
@@ -161,8 +178,30 @@
                 link.attr("d", linkLine);
                 node.attr("transform", transform);
                 text.attr("transform", transform);
+                // The parameter for attr is a function, whose parameter is each individual element
+                linkText.attr("x", linkX);
+                linkText.attr("y", linkY);
             }
 
+            function linkX(d) {
+                //return d.source.x;
+                if (d.target.x > d.source.x) {
+                    return (d.source.x + (d.target.x - d.source.x)/2);
+                } else {
+                    return (d.target.x + (d.source.x - d.target.x)/2);
+                }
+            }
+
+            function linkY(d) {
+                //return d.source.y;
+                if (d.target.y > d.source.y) {
+                    return (d.source.y + (d.target.y - d.source.y)/2);
+                } else {
+                    return (d.target.y + (d.source.y - d.target.y)/2);
+                }
+            }
+
+            // Draws an arc from the source to the target.
             function linkArc(d) {
                 var dx = d.target.x - d.source.x,
                     dy = d.target.y - d.source.y,
@@ -183,7 +222,7 @@
             ///////////// HELPER METHODS /////////////
 
             /**
-             * Sorts and sets nodes' positions.
+             * IF the force graph is fixed, sets nodes' positions.
              */
             function setupNodes(nodes) {
                 // Sets the positions of the given nodes
@@ -213,8 +252,21 @@
                     xCounter++;
                     yShift = !yShift;
                 });
+            }
 
-                console.log(nodes);
+            /**
+             * Only gets the links that have GPAs.
+             */
+            function getGpaLinks(links) {
+                gpaLinks = [];
+
+                links.forEach(function(link) {
+                    if(link.hasOwnProperty('gpa')) {
+                        gpaLinks.push(link);
+                    }
+                });
+
+                return gpaLinks;
             }
         </script>
         <p>Welcome to UW CSE Courses!</p>

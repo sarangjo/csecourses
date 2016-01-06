@@ -1,0 +1,111 @@
+{
+    "352": {
+        "name": "Hardware Design and Implementation (4)",
+        "description": "Covers digital circuit design, processor design, and systems integration and embedded-systems issues. Includes substantial hardware laboratory. Prerequisite: CSE 311; CSE 351.",
+        "number": 352
+    },
+    "131": {
+        "name": "Science and Art of Digital Photography (4) VLPA",
+        "description": "Covers the fundamentals of digital photography, including computational imaging; the elements of photographic composition and design; and the future of internet-enabled photography.",
+        "number": 131
+    },
+    "390": {
+        "name": "Special Topics in Computer Science and Engineering (1-5, max. 10)",
+        "description": "Covers topics of current interest in computer science and engineering.",
+        "number": 390
+    },
+    "331": {
+        "name": "Software Design and Implementation (4)",
+        "description": "Explores concepts and techniques for design and construction of reliable and maintainable software systems in modern high-level languages; program structure and design; program-correctness approaches, including testing; and event-driven programming (e.g., graphical user interface). Includes substantial project and software-team experience. Prerequisite: CSE 143.",
+        "number": 331
+    },
+    "332": {
+        "name": "Data Abstractions (4)",
+        "description": "Covers abstract data types and structures including dictionaries, balanced trees, hash tables, priority queues, and graphs; sorting; asymptotic analysis; fundamental graph algorithms including graph search, shortest path, and minimum spanning trees; concurrency and synchronization; and parallelism. Not available for credit for students who have completed CSE 373. Prerequisite: CSE 311.",
+        "number": 332
+    },
+    "333": {
+        "name": "Systems Programming (4)",
+        "description": "Includes substantial programming experience in languages that expose machine characteristics and low-level data representation (e.g., C and C++); explicit memory management; interacting with operating-system services; and cache-aware programming. Prerequisite: CSE 351.",
+        "number": 333
+    },
+    "142": {
+        "name": "Computer Programming I (4) NW, QSR",
+        "description": "Basic programming-in-the-small abilities and concepts including procedural programming (methods, parameters, return, values), basic control structures (sequence, if/else, for loop, while loop), file processing, arrays, and an introduction to defining objects. Intended for students without prior programming experience. Offered: AWSpS.",
+        "number": 142
+    },
+    "143": {
+        "name": "Computer Programming II (5) NW, QSR",
+        "description": "Continuation of CSE 142. Concepts of data abstraction and encapsulation including stacks, queues, linked lists, binary trees, recursion, instruction to complexity and use of predefined collection classes. Prerequisite: CSE 142. Offered: AWSpS.",
+        "number": 143
+    },
+    "312": {
+        "name": "Foundations of Computing II (4) QSR",
+        "description": "Examines fundamentals of enumeration and discrete probability; applications of randomness to computing; polynomial-time versus NP; and NP-completeness. Prerequisite: CSE 311; CSE 332, which may be taken concurrently.",
+        "number": 312
+    },
+    "341": {
+        "name": "Programming Languages (4)",
+        "description": "Basic concepts of programming languages, including abstraction mechanisms, types, and scoping. Detailed study of several different programming paradigms, such as functional, object-oriented, and logic programming. No credit if CSE 413 has been taken. Prerequisite: CSE 143.",
+        "number": 341
+    },
+    "344": {
+        "name": "Introduction to Data Management (4)",
+        "description": "Introduces database management systems and writing applications that use such systems; data models (e.g., relational, semi-structured), query languages (e.g., SQL, XQuery), language bindings, conceptual modeling, transactions, security, database tuning, data warehousing, parallelism, and web-data management. Prerequisite: CSE 311.",
+        "number": 344
+    },
+    "154": {
+        "name": "Web Programming (5) QSR",
+        "description": "Covers languages, tools, and techniques for developing interactive and dynamic web pages. Topics include page styling, design, and layout; client and server side scripting; web security; and interacting with data sources such as databases. Prerequisite: minimum grade of 2.0 in either CSE 142, CSE 143, or CSE 160.",
+        "number": 154
+    },
+    "399": {
+        "name": "CSE Foreign Study (*)",
+        "description": "Upper-division computer science or computer engineering course, taken through an approved study abroad program, for which there is no direct University of Washington equivalent. Credit/no-credit only.",
+        "number": 399
+    },
+    "351": {
+        "name": "The Hardware/Software Interface (4)",
+        "description": "Examines key computational abstraction levels below modern high-level languages; number representation, assembly language, introduction to C, memory management, the operating-system process model, high-level machine architecture including the memory hierarchy, and how high-level languages are implemented. Prerequisite: CSE 143.",
+        "number": 351
+    },
+    "160": {
+        "name": "Data Programming (4) NW, QSR",
+        "description": "Introduction to computer programming. Assignments solve real data manipulation tasks from science, engineering, business, and the humanities. Concepts of computational thinking, problem-solving, data analysis, Python programming, control and data abstraction, file processing, and data visualization. Intended for students without prior programming experience. No credit if CSE 143 has been taken.",
+        "number": 160
+    },
+    "369": {
+        "name": "Introduction to Digital Design (2)",
+        "description": "Introduces the implementation of digital logic and its specification and simulation. Covers Boolean algebra; combinational circuits including arithmetic circuits and regular structures; sequential circuits including finitestate-machines; and use of field-programmable gate arrays (FPGAs). Emphasizes simulation, high-level specification, and automatic synthesis techniques. Prerequisite: CSE 311.",
+        "number": 369
+    },
+    "371": {
+        "name": "Design of Digital Circuits and Systems (5)",
+        "description": "Provides a theoretical background in, and practical experience with, tools, and techniques for modeling complex digital systems with the Verilog hardware description language, maintaining signal integrity, managing power consumption, and ensuring robust intra- and inter-system communication. Prerequisite: either E E 205 or E E 215; either E E 271 or CSE 369. Offered: jointly with E E 371.",
+        "number": 371
+    },
+    "373": {
+        "name": "Data Structures and Algorithms (3)",
+        "description": "Fundamental algorithms and data structures for implementation. Techniques for solving problems by programming. Linked lists, stacks, queues, directed graphs. Trees: representations, traversals. Searching (hashing, binary search trees, multiway trees). Garbage collection, memory management. Internal and external sorting. Intended for non-majors. Not open for credit to students who have completed CSE 332. Prerequisite: CSE 143.",
+        "number": 373
+    },
+    "374": {
+        "name": "Intermediate Programming Concepts and Tools (3)",
+        "description": "Covers key software development concepts and tools not in introductory courses. Concepts of lower-level programming (C/C++) and explicit memory management; techniques and tools for individual and group software development; design, implementation, and testing strategies. Intended for non-majors. Cannot be taken for credit if credit received for CSE 333. Prerequisite: CSE 143.",
+        "number": 374
+    },
+    "311": {
+        "name": "Foundations of Computing I (4) QSR",
+        "description": "Examines fundamentals of logic, set theory, induction, and algebraic structures with applications to computing; finite state machines; and limits of computability. Prerequisite: CSE 143; either MATH 126 or MATH 136.",
+        "number": 311
+    },
+    "120": {
+        "name": "Computer Science Principles (5) NW, QSR",
+        "description": "Introduces fundamental concepts of computer science and computational thinking. Includes logical reasoning, problem solving, data representation, abstraction, the creation of digital artifacts such as web pages and programs, managing complexity, operation of computers and networks, effective web searching, ethical, legal and social aspects of information technology. May not be taken for credit if credit earned in CSE 100/INFO 100.",
+        "number": 120
+    },
+    "190": {
+        "name": "Current Topics in Computer Science and Engineering (1-5, max. 15)",
+        "number": 190
+    }
+}

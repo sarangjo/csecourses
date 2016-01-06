@@ -15,39 +15,47 @@ class CSEHTMLParser(HTMLParser):
         self.inName = False
         self.inP = False
         self.inDesc = False
+        # TODO: Figure out issue with calling close() when done
+        self.isDone = False
         # other fields
         self.num = 0
 
     def handle_starttag(self, tag, attrs):
-        if tag == "a" and not self.inP:
-            # class code before paragraph
-            self.num = CSEParser.get_code_from_tag(attrs[0][1])
-            nodes[self.num] = {"number": self.num}
-        elif tag == "p":
-            # entered a new class paragraph
-            self.inP = True
-        elif tag == "b" and self.inP:
-            # set name
-            self.inName = True
-        elif tag == "br" and self.inP:
-            self.inDesc = True
+        if not self.isDone:
+            if tag == "a" and not self.inP:
+                # class code before paragraph
+                self.num = CSEParser.get_code_from_tag(attrs[0][1])
+                if int(self.num / 100) > levels:
+                    self.isDone = True
+                    return
+                nodes[self.num] = {"number": self.num}
+            elif tag == "p":
+                # entered a new class paragraph
+                self.inP = True
+            elif tag == "b" and self.inP:
+                # set name
+                self.inName = True
+            elif tag == "br" and self.inP:
+                self.inDesc = True
 
     def handle_data(self, data):
-        if self.inName:
-            nodes[self.num]["name"] = CSEParser.get_name_from_data(data)
-        elif self.inDesc:
-            nodes[self.num]["description"] = data
+        if not self.isDone:
+            if self.inName:
+                nodes[self.num]["name"] = CSEParser.get_name_from_data(data)
+            elif self.inDesc:
+                nodes[self.num]["description"] = data
 
     def handle_endtag(self, tag):
-        if tag == "p" and self.inP:
-            # finished a single class
-            self.inP = False
-        elif tag == "b" and self.inName:
-            # finished name
-            self.inName = False
-        elif tag == "a" and self.inDesc:
-            # finished description paragraph
-            self.inDesc = False
+        if not self.isDone:
+            if tag == "p" and self.inP:
+                # finished a single class
+                self.inP = False
+            elif tag == "b" and self.inName:
+                # finished name
+                self.inName = False
+            elif tag == "a" and self.inDesc:
+                # finished description paragraph
+                self.inDesc = False
 
 
 def parse_links_from_pre_req(target, words, i=0):
@@ -129,6 +137,7 @@ def parse_links_from_pre_req(target, words, i=0):
 # 0. Setup
 nodes = {}
 links = []
+levels = 3
 
 
 # 1. Use the alternate parser. First run, simply construct the nodes map, which maps from class code
@@ -141,8 +150,9 @@ parser.feed(s)
 
 # 2. Then, go through each of the prerequisites and set up the links list, with source and target attributes
 # that correspond to course numbers
-for code in nodes:
+for code in sorted(nodes):
     node = nodes[code]
+
     try:
         desc = node["description"]
         prs = CSEParser.get_pre_reqs_from_description(desc)
@@ -154,7 +164,7 @@ for code in nodes:
         pass
 
 # 3. Output all the unsorted nodes to a nodes file, links to a links file.
-nodes_file = open('testcourses5-alt.json', 'w')
+nodes_file = open('testcourses'+str(levels)+'-alt.json', 'w')
 json.dump(nodes, nodes_file, indent=4)
-links_file = open('testlinks5-alt.json', 'w')
+links_file = open('testlinks'+str(levels)+'-alt.json', 'w')
 json.dump(links, links_file, indent=4)
