@@ -1,274 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>UW CSE Courses</title>
-        <script type="text/javascript" src="js/d3.min.js"></script>
-        <script type="text/javascript" src="js/d3.tip.v0.6.3.js"></script>
-        <script src="js/queue.v1.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="style.css">
-    </head>
-    <body>
-        <script type="text/javascript">
-            // How many levels of classes we're considering
-            var LEVELS = 3;
-            var NODE_SIZE = 20;
+	<head>
+		<meta charset="utf-8">
+		<title>UW CSE Courses</title>
+		<script type="text/javascript" src="js/d3.min.js"></script>
+		<script type="text/javascript" src="js/d3.tip.v0.6.3.js"></script>
+		<script src="js/queue.v1.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<script type="text/javascript">
+			// How many levels of classes we're considering
+			var LEVELS = 3;
+			var NODE_RADIUS = 20;
 
-            // Whether nodes are fixed or not
-            var fixed = false;
+			// Whether nodes are fixed or not
+			var fixed = false;
 
-            var w = 1200, h = 700;
-            if (fixed || LEVELS >= 4) {
-                w = 2400;
-                h = 480;
-            }
+			// Bounds for the graph
+			var w = 1200, h = 700;
+			if (fixed || LEVELS >= 4) {
+				w = 2400;
+				h = 480;
+			}
 
-            var link, node, text, linkText;
+			var link, node, text, linkText;
+			var bounds;
 
-            var filenames = ["csecourses/testcourses"+ LEVELS + "-alt.json", "csecourses/testlinks"+ LEVELS + "-alt.json"];
+			// Input files
+			var filenames = ["csecourses/testcourses"+ LEVELS + "-alt.json", "csecourses/testlinks"+ LEVELS + "-alt.json"];
 
-            loadFiles(filenames);
+			// Kickstart the process by first loading the files
+			loadFiles(filenames);
 
-            /**
-             * Loads the given list of file names. Calls onFilesLoaded when files are 
-             * done loading.
-             */
-            function loadFiles(filenames) {
-                var q = queue();
+			/**
+			 * Loads the given list of file names. Calls onFilesLoaded when files are 
+			 * done loading.
+			 */
+			function loadFiles(filenames) {
+				var q = queue();
 
-                filenames.forEach(function(d) {
-                    q.defer(d3.json, d);
-                });
-                q.awaitAll(onFilesLoaded);
-            }
+				filenames.forEach(function(d) {
+					q.defer(d3.json, d);
+				});
+				q.awaitAll(onFilesLoaded);
+			}
 
-            /**
-             * Called when the JSON files have been loaded.
-             */
-            function onFilesLoaded(err, results) {
-                var nodes = results[0];
-                var links = results[1];
+			/**
+			 * Called when the JSON files have been loaded.
+			 */
+			function onFilesLoaded(err, results) {
+				var nodes = results[0];
+				var links = results[1];
 
-                if (fixed) {
-                    setupNodes(nodes);
-                }
+				if (fixed) {
+					setupNodes(nodes);
+				}
 
-                // Attaching node objects to links
-                links.forEach(function(link) {
-                    link.source = nodes[link.source];
-                    link.target = nodes[link.target];
-                });
+				// Attaching node objects (from node indices) to links
+				links.forEach(function(link) {
+					link.source = nodes[link.source];
+					link.target = nodes[link.target];
+				});
 
-                // Main part of force layout
-                var force = d3.layout.force()
-                    .size([w, h])
-                    .nodes(d3.values(nodes))
-                    .links(links);
+				// Main part of force layout
+				var force = d3.layout.force()
+					.size([w, h])
+					.nodes(d3.values(nodes))
+					.links(links);
 
-                if (!fixed) {
-                    // Allows for movement of the nodes
-                    force.linkDistance(190)
-                        .charge(-300)
-                        .on("tick", tick)
-                        .start();
-                }
+				if (!fixed) {
+					// Allows for movement of the nodes
+					force//.linkDistance(100)
+						.charge(-500)
+						.on("tick", tick)
+						.start();
+				}
 
-                // Access to the SVG container
-                var svg = d3.select("body").append("svg")
-                    .attr("width", w)
-                    .attr("height", h);
+				// Access to the SVG container
+				var svg = d3.select("body").append("svg")
+					.attr("width", w)
+					.attr("height", h);
 
-                // Setting up the link end arrows
-                svg.append("defs").selectAll("marker")
-                        .data(["regular","gpa"]).enter()
-                    .append("marker")
-                        .attr("id", function(d) { return d; })
-                        // Viewport for the arrow
-                        .attr("viewBox", "0 -5 10 10")
-                        // Offset from the center of the node
-                        .attr("refX", 27)
-                        .attr("refY", 0)
-                        // These are just bounding-box attributes
-                        .attr("markerWidth", 6)
-                        .attr("markerHeight", 6)
-                        .attr("orient", "auto")
-                    .append("path")
-                        // Draws the triangle, pointing right. M denotes start, L is each point
-                        .attr("d", "M0,-5L10,0L0,5");
+				// Link end arrows
+				svg.append("defs").selectAll("marker")
+						.data(["regular","gpa"]).enter()
+					.append("marker")
+						.attr("id", function(d) { return d; })
+						.attr("viewBox", "0 -5 10 10")			// Viewport for the arrow
+						.attr("refX", 27).attr("refY", 0)		// Offset from the center of the node
+						.attr("markerWidth", 6).attr("markerHeight", 6)
+																// Bounding-box attributes
+						.attr("orient", "auto")
+					.append("path")
+						// Draws the triangle, pointing right. M denotes start, L is each point
+						.attr("d", "M0,-5L10,0L0,5");
 
-                ///////// VISUALIZATION /////////
+				// x1 y1 x2 y2
+				//bounds1 = [200, 200, 600, 400];
+				//bounds3 = [700, 200, 1100, 400];
 
-                // Links
-                link = svg.append("g").selectAll(".link")
-                    .data(force.links()).enter()
-                    // This is of type <path>, because it might potentially be a curve,
-                    // not just a straight <line>.
-                    .append("path")
-                    // Changes the color of the link if there's a minimum GPA requirement
-                    .attr("class", function(d) {
-                        return "link" + (d.hasOwnProperty('gpa') ? " gpa" : "");
-                    })
-                    // Attaches marker (arrow) to the end of the link
-                    // As of now the regular link is just called "regular"
-                    .style("marker-end", function(d) {
-                        return "url(#" + (d.hasOwnProperty('gpa') ? "gpa" : "regular") + ")";
-                    });
+				// 1, 3
+				bounds = [
+					{x: 200, y: 100, width: 400, height: 400},
+					{x: 700, y: 100, width: 400, height: 400}
+				];
 
-                // Nodes
-                node = svg.append("g").selectAll(".node")
-                    .data(force.nodes()).enter()
-                    .append("circle")
-                    .attr('r', NODE_SIZE)
-                    .attr("class", "node");
+				// Rectangles for 100 and 300 level courses
+				var rectangle = svg.append("g").selectAll(".bounds")
+					.data(bounds).enter()
+					.append("rect")
+					.attr({
+						x: function(d) { return d.x-5; },
+                    	y: function(d) { return d.y-5; },
+                    	width: function(d) { return d.width+10; },
+                    	height: function(d) { return d.height+10; }
+					}).style({
+						fill: "white",
+						stroke: "black",
+						"stroke-width": 5
+					});
 
-                if (!fixed) {
-                    node.call(force.drag);
-                }
+				// Links
+				link = svg.append("g").selectAll(".link")
+					.data(force.links()).enter()
+					// This is of type <path>, because it might potentially be a curve,
+					// not just a straight <line>.
+					.append("path")
+					// Changes the color of the link if there's a minimum GPA requirement
+					.attr("class", function(d) {
+						return "link" + (d.hasOwnProperty('gpa') ? " gpa" : "");
+					})
+					// Attaches marker (arrow) to the end of the link
+					// As of now the regular link is just called "regular"
+					.style("marker-end", function(d) {
+						return "url(#" + (d.hasOwnProperty('gpa') ? "gpa" : "regular") + ")";
+					});
 
-                // Text
-                text = svg.append("g").selectAll(".text")
-                    .data(force.nodes()).enter()
-                    .append("text")
-                    .text(function(d) { return d.number; });
+				// Nodes
+				node = svg.append("g").selectAll(".node")
+					.data(force.nodes()).enter()
+					.append("circle")
+					.attr('r', NODE_RADIUS)
+					.attr("class", "node");
 
-                if (!fixed) {
-                    text.attr("x", 25)
-                        .attr("y", ".31em");
-                }
+				if (!fixed) {
+					node.call(force.drag);
+				}
 
-                // Extract out links with GPA values
-                gpaLinks = getGpaLinks(links);
-                
-                // Link GPA Text
-                linkText = svg.append("g").selectAll(".linkText")
-                    .data(gpaLinks).enter()
-                    .append("text")
-                    .attr("dy", ".35em")
-                    .attr("fill", "Black")
-                    .text(function(d) {
-                        // Make sure there's 1 decimal place
-                        return Number(d.gpa).toFixed(1);
-                    });
+				// Text
+				text = svg.append("g").selectAll(".text")
+					.data(force.nodes()).enter()
+					.append("text")
+					.text(function(d) { return d.number; });
+				if (!fixed) {
+					text.attr("x", 25)
+						.attr("y", ".31em");
+				}
 
-                // Fixed force graph
-                if(fixed) {
-                    force.on('end', function() {
-                        node.attr('cx', function(d) { return d.x; })
-                            .attr('cy', function(d) { return d.y; });
-                    
-                        link.attr('x1', function(d) { return d.source.x; })
-                            .attr('y1', function(d) { return d.source.y; })
-                            .attr('x2', function(d) { return d.target.x; })
-                            .attr('y2', function(d) { return d.target.y; });
-    
-                        text.attr("x", function(d) { return d.x - 12; })
-                            .attr("y", function(d) { return d.y + 5; });
-                        
-    
-                        console.log("Done!");
-    
-                        d3.select("body").append("p").text("Done Loading!");
-                    });
-    
-                    force.start();
-                }
-            }
+				// Extract out links with GPA values
+				gpaLinks = getGpaLinks(links);
+				
+				// Link GPA Text
+				linkText = svg.append("g").selectAll(".linkText")
+					.data(gpaLinks).enter()
+					.append("text")
+					.attr("dy", ".35em")
+					.attr("fill", "Black")
+					.text(function(d) {
+						// Make sure there's 1 decimal place
+						return Number(d.gpa).toFixed(1);
+					});
 
-            function tick() {
-                link.attr("d", linkLine);
-                node.attr("transform", transform);
-                text.attr("transform", transform);
-                // The parameter for attr is a function, whose parameter is each individual element
-                linkText.attr("x", linkX);
-                linkText.attr("y", linkY);
-            }
+				// Fixed force graph
+				if(fixed) {
+					force.on('end', function() {
+						node.attr('cx', function(d) { return d.x; })
+							.attr('cy', function(d) { return d.y; });
+					
+						link.attr('x1', function(d) { return d.source.x; })
+							.attr('y1', function(d) { return d.source.y; })
+							.attr('x2', function(d) { return d.target.x; })
+							.attr('y2', function(d) { return d.target.y; });
+	
+						text.attr("x", function(d) { return d.x - 12; })
+							.attr("y", function(d) { return d.y + 5; });
+						
+	
+						console.log("Done!");
+	
+						d3.select("body").append("p").text("Done Loading!");
+					});
+	
+					force.start();
+				}
 
-            function linkX(d) {
-                //return d.source.x;
-                if (d.target.x > d.source.x) {
-                    return (d.source.x + (d.target.x - d.source.x)/2);
-                } else {
-                    return (d.target.x + (d.source.x - d.target.x)/2);
-                }
-            }
+				////////////// DEBUG //////////////
 
-            function linkY(d) {
-                //return d.source.y;
-                if (d.target.y > d.source.y) {
-                    return (d.source.y + (d.target.y - d.source.y)/2);
-                } else {
-                    return (d.target.y + (d.source.y - d.target.y)/2);
-                }
-            }
+				console.log(nodes);
+			}
 
-            // Draws an arc from the source to the target.
-            function linkArc(d) {
-                var dx = d.target.x - d.source.x,
-                    dy = d.target.y - d.source.y,
-                    dr = Math.sqrt(dx * dx + dy * dy);
-                return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
-            }
+			function tick() {
+				link.attr("d", linkLine);
 
-            function linkLine(d) {
-                return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
-            }
+				// Bounding in a particular box
+				node.attr("cx", function(d) {
+						if (isLevel(d.number, 3)) {
+							return d.x = Math.max(bounds[1].x + NODE_RADIUS, Math.min(bounds[1].x + bounds[1].width - NODE_RADIUS, d.x));
+						} else {
+							return d.x = Math.max(bounds[0].x + NODE_RADIUS, Math.min(bounds[0].x + bounds[0].width - NODE_RADIUS, d.x));
+						}
+					}).attr("cy", function(d) {
+						if (isLevel(d.number, 3)) {
+							return d.y = Math.max(bounds[1].y + NODE_RADIUS, Math.min(bounds[1].y + bounds[1].height - NODE_RADIUS, d.y));
+						} else {
+							return d.y = Math.max(bounds[0].y + NODE_RADIUS, Math.min(bounds[0].y + bounds[0].height - NODE_RADIUS, d.y));
+						}
+					});
 
-            function transform(d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            }
+				// max(LOWERBOUND, min(UPPERBOUND, x))
+				// Ofset by RADIUS because this attribute is the center of the node
+				/*node.attr("cx", function(d) { return d.x = Math.max(xBounds[0] + NODE_RADIUS, Math.min(xBounds[1] - NODE_RADIUS, d.x)); })
+					.attr("cy", function(d) { return d.y = Math.max(yBounds[0] + NODE_RADIUS, Math.min(yBounds[1] - NODE_RADIUS, d.y)); });
+				*/
 
-                
+				//node.attr("transform", transform);
 
-            ///////////// HELPER METHODS /////////////
+				text.attr("transform", transform);
+				
+				// The parameter for attr is a function, whose parameter is each individual element
+				linkText.attr("x", linkX);
+				linkText.attr("y", linkY);
+			}
 
-            /**
-             * IF the force graph is fixed, sets nodes' positions.
-             */
-            function setupNodes(nodes) {
-                // Sets the positions of the given nodes
-                var BASE_X = 60;
-                var LEVEL_OFFSET = 150;
-                var NODE_OFFSET = 30;
-                
-                var currentLevel = 1;
-                var xCounter = 0;
-                var yShift = false;
+			function linkX(d) {
+				//return d.source.x;
+				if (d.target.x > d.source.x) {
+					return (d.source.x + (d.target.x - d.source.x)/2);
+				} else {
+					return (d.target.x + (d.source.x - d.target.x)/2);
+				}
+			}
 
-                nodes.forEach(function(n) {
-                    var level = Math.floor(n.number / 100);
-                    level = (level != 1 ? level - 2 : level - 1);
-                    
-                    // Updates level
-                    if (level != currentLevel) {
-                        currentLevel = level;
-                        xCounter = 0;
-                    }
+			function linkY(d) {
+				//return d.source.y;
+				if (d.target.y > d.source.y) {
+					return (d.source.y + (d.target.y - d.source.y)/2);
+				} else {
+					return (d.target.y + (d.source.y - d.target.y)/2);
+				}
+			}
 
-                    n.x = BASE_X + (xCounter * (NODE_SIZE + NODE_OFFSET));
-                    n.y = (LEVEL_OFFSET / 2) + (level * LEVEL_OFFSET) + (yShift ? 30 : 0);
-                    // Doesn't allow force to actually modify the positions of the nodes
-                    n.fixed = true;
-                    
-                    xCounter++;
-                    yShift = !yShift;
-                });
-            }
+			// Draws an arc from the source to the target.
+			function linkArc(d) {
+				var dx = d.target.x - d.source.x,
+					dy = d.target.y - d.source.y,
+					dr = Math.sqrt(dx * dx + dy * dy);
+				return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+			}
 
-            /**
-             * Only gets the links that have GPAs.
-             */
-            function getGpaLinks(links) {
-                gpaLinks = [];
+			function linkLine(d) {
+				return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+			}
 
-                links.forEach(function(link) {
-                    if(link.hasOwnProperty('gpa')) {
-                        gpaLinks.push(link);
-                    }
-                });
+			function transform(d) {
+				return "translate(" + d.x + "," + d.y + ")";
+			}
 
-                return gpaLinks;
-            }
-        </script>
-        <p>Welcome to UW CSE Courses!</p>
-    </body>
+				
+
+			///////////// HELPER METHODS /////////////
+
+			/**
+			 * IF the force graph is fixed, sets nodes' positions.
+			 */
+			function setupNodes(nodes) {
+				// Sets the positions of the given nodes
+				var BASE_X = 60;
+				var LEVEL_OFFSET = 150;
+				var NODE_OFFSET = 30;
+				
+				var currentLevel = 1;
+				var xCounter = 0;
+				var yShift = false;
+
+				nodes.forEach(function(n) {
+					var level = Math.floor(n.number / 100);
+					level = (level != 1 ? level - 2 : level - 1);
+					
+					// Updates level
+					if (level != currentLevel) {
+						currentLevel = level;
+						xCounter = 0;
+					}
+
+					n.x = BASE_X + (xCounter * (NODE_RADIUS + NODE_OFFSET));
+					n.y = (LEVEL_OFFSET / 2) + (level * LEVEL_OFFSET) + (yShift ? 30 : 0);
+					// Doesn't allow force to actually modify the positions of the nodes
+					n.fixed = true;
+					
+					xCounter++;
+					yShift = !yShift;
+				});
+			}
+
+			/**
+			 * Only gets the links that have GPAs.
+			 */
+			function getGpaLinks(links) {
+				gpaLinks = [];
+
+				links.forEach(function(link) {
+					if(link.hasOwnProperty('gpa')) {
+						gpaLinks.push(link);
+					}
+				});
+
+				return gpaLinks;
+			}
+
+			function isLevel(number, level) {
+				return (Math.floor(number / 100) == level);
+			}
+		</script>
+		<p>Welcome to UW CSE Courses!</p>
+	</body>
 </html>
