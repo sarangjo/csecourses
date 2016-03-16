@@ -4,6 +4,11 @@ from html.parser import HTMLParser
 
 import CSEParser
 
+intro = [142, 143]
+reqd = [311, 312, 332, 351]
+reqdCS = [331]
+reqdCE = [369, 371]
+
 
 class CSEHTMLParser(HTMLParser):
     def error(self, message):
@@ -29,6 +34,14 @@ class CSEHTMLParser(HTMLParser):
                     self.isDone = True
                     return
                 nodes[self.num] = {"number": self.num}
+                if self.num in reqd:
+                    nodes[self.num]["classification"] = "required"
+                elif self.num in reqdCS:
+                    nodes[self.num]["classification"] = "cs"
+                elif self.num in reqdCE:
+                    nodes[self.num]["classification"] = "ce"
+                elif self.num in intro:
+                    nodes[self.num]["classification"] = "intro"
             elif tag == "p":
                 # entered a new class paragraph
                 self.inP = True
@@ -139,7 +152,6 @@ nodes = {}
 links = []
 levels = 3
 
-
 # 1. Use the alternate parser. First run, simply construct the nodes map, which maps from class code
 # to a map of all the details
 f = open('cse.html')
@@ -164,7 +176,7 @@ for code in sorted(nodes):
         pass
 
 # 3. Output all the unsorted nodes to a nodes file, links to a links file.
-nodes_file = open('testcourses'+str(levels)+'-alt.json', 'w')
+nodes_file = open('testcourses' + str(levels) + '-alt.json', 'w')
 json.dump(nodes, nodes_file, indent=4)
-links_file = open('testlinks'+str(levels)+'-alt.json', 'w')
+links_file = open('testlinks' + str(levels) + '-alt.json', 'w')
 json.dump(links, links_file, indent=4)

@@ -12,8 +12,20 @@ div.bar {
 
 .node {
 	fill: #ccc;
-	stroke: #fff;
+	stroke: #000;
 	stroke-width: 3px;
+}
+.node.required {
+	stroke: #13F6F6;
+}
+.node.cs {
+	stroke: #D532C0;
+}
+.node.ce {
+	stroke: #118B15;
+}
+.node.intro {
+	stroke: #F6B213;
 }
 
 /* Different types of links */

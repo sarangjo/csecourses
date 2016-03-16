@@ -5,7 +5,7 @@ var NODE_RADIUS = 20;
 // Whether nodes are fixed or not
 // Display style
 var DisplayEnum = Object.freeze({FIXED: 0, MOTILE: 1, FIXEDMOTILE: 2});
-var display = DisplayEnum.FIXEDMOTILE;
+var display = DisplayEnum.FIXED;
 
 // Bounds for the graph
 var w,h;
@@ -116,17 +116,6 @@ function setup(results) {
  * Adds all the SVG elements to the container, using the force object.
  */
 function drawEverything() {
-	// Nodes
-	node = svg.append("g").selectAll(".node")
-		.data(force.nodes()).enter()
-		.append("circle")
-		.attr('r', NODE_RADIUS)
-		.attr("class", "node");
-
-	if (display == DisplayEnum.MOTILE) {
-		node.call(force.drag);
-	}
-
 	// Links
 	link = svg.append("g").selectAll(".link")
 		.data(force.links()).enter()
@@ -156,6 +145,54 @@ function drawEverything() {
 		.append("path")
 			// Draws the triangle, pointing right. M denotes start, L is each point
 			.attr("d", "M0,-5L10,0L0,5");
+
+	var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([-10, 0])
+      .html(function(d) {
+         x = "<strong>Name:</strong> <span class='tooltip-info'>" + d["name"] + "</span>";
+         return x;
+  });
+
+	// Nodes
+	node = svg.append("g").selectAll(".node")
+		.data(force.nodes()).enter()
+		.append("circle")
+		.attr('r', NODE_RADIUS)
+		.attr("class", function(d) {
+			return "node" + (d.hasOwnProperty("classification") ? (" " + d["classification"]) : "");
+		});
+
+	if (display == DisplayEnum.MOTILE) {
+		node.call(force.drag);
+	}
+
+	node.call(tip);
+
+  node.on("mouseover", function(d) {
+    tip.show(d);
+    /*var descendantResults = new Set();
+    getTraversal(d, descendantResults, parentToChildDirectory);
+    var ancestorResults = new Set();
+    getTraversal(d, ancestorResults, childToParentDirectory);
+    
+    set_focus(d, circle, text, path, ancestorResults, descendantResults)
+    set_highlight(d, circle, text, path, ancestorResults, descendantResults);*/
+  });
+
+  node.on("mouseout", function(d) {
+    /*if (!clicked) {
+          focus_node = null;
+          if (highlight_trans<1)
+          {
+      
+        circle.style("opacity", 1);
+        text.style("opacity", 1);
+      }
+      exit_highlight(circle, text, path);
+    }*/
+    tip.hide(d);
+  });
 
 	// Text
 	text = svg.append("g").selectAll(".text")
