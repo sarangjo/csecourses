@@ -47,7 +47,16 @@ div.bar {
 	font: sans-serif;
 }
 
-d3-tip {
+.d3-tip {
 	line-height: 1;
 	color: black;
+  font-weight: bold;
+  color: #474647;
+  padding: 12px;
+  background: rgb(151, 151, 160);
+  border-radius: 2px;
+}
+
+.tooltip-info {
+	color: #C71585;
 }

@@ -258,7 +258,7 @@ function fixedForceGraph(force) {
 		link.attr("d", linkLine);
 
 		text.attr("x", function(d) { return d.x - 12; })
-			.attr("y", function(d) { return d.y + 5; });
+			.attr("y", function(d) { return d.y + NODE_RADIUS*2- 5; });
 
 		linkText.attr("x", function(d) { return linkTextPos(d, "x"); });
 		linkText.attr("y", function(d) { return linkTextPos(d, "y"); });
